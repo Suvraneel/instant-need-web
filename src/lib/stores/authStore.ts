@@ -4,6 +4,25 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { UserDTO } from "@/lib/types/auth";
 
+// ── Cookie helpers (needed by Next.js middleware for server-side route guards) ──
+const COOKIE_TOKEN = "instant-need-access-token";
+const COOKIE_ROLE  = "instant-need-role";
+
+function setCookies(token: string, role: string) {
+  if (typeof document === "undefined") return;
+  const expires = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toUTCString();
+  document.cookie = `${COOKIE_TOKEN}=${token}; path=/; expires=${expires}; SameSite=Lax`;
+  document.cookie = `${COOKIE_ROLE}=${role}; path=/; expires=${expires}; SameSite=Lax`;
+}
+
+function clearCookies() {
+  if (typeof document === "undefined") return;
+  document.cookie = `${COOKIE_TOKEN}=; path=/; max-age=0`;
+  document.cookie = `${COOKIE_ROLE}=; path=/; max-age=0`;
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+
 interface AuthState {
   user: UserDTO | null;
   accessToken: string | null;
@@ -30,17 +49,28 @@ export const useAuthStore = create<AuthState>()(
       accessToken: null,
       refreshToken: null,
 
-      login: (user, accessToken, refreshToken) =>
-        set({ user, accessToken, refreshToken }),
+      login: (user, accessToken, refreshToken) => {
+        setCookies(accessToken, user.role);
+        set({ user, accessToken, refreshToken });
+      },
 
-      setTokens: (accessToken, refreshToken) =>
-        set({ accessToken, refreshToken }),
+      setTokens: (accessToken, refreshToken) => {
+        const role = get().user?.role ?? "CUSTOMER";
+        setCookies(accessToken, role);
+        set({ accessToken, refreshToken });
+      },
 
-      logout: () => set({ user: null, accessToken: null, refreshToken: null }),
+      logout: () => {
+        clearCookies();
+        set({ user: null, accessToken: null, refreshToken: null });
+      },
 
       getAccessToken: () => get().accessToken,
       getRefreshToken: () => get().refreshToken,
-      clearAuth: () => set({ user: null, accessToken: null, refreshToken: null }),
+      clearAuth: () => {
+        clearCookies();
+        set({ user: null, accessToken: null, refreshToken: null });
+      },
 
       isAdmin: () => get().user?.role === "ADMIN",
       isAuthenticated: () => !!get().accessToken,
@@ -52,6 +82,12 @@ export const useAuthStore = create<AuthState>()(
         accessToken: state.accessToken,
         refreshToken: state.refreshToken,
       }),
+      // Re-sync cookies when hydrating from localStorage on page load
+      onRehydrateStorage: () => (state) => {
+        if (state?.accessToken && state?.user) {
+          setCookies(state.accessToken, state.user.role);
+        }
+      },
     }
   )
 );

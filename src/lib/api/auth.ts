@@ -11,7 +11,10 @@ import type {
 
 export const authApi = {
   login: (body: LoginRequest) =>
-    apiClient.post<AuthResponse>("/auth/login", body).then((r) => r.data),
+    // Backend expects { email, password } — map identifier → email
+    apiClient
+      .post<AuthResponse>("/auth/login", { email: body.identifier, password: body.password })
+      .then((r) => r.data),
 
   register: (body: RegisterRequest) =>
     apiClient.post<AuthResponse>("/auth/register", body).then((r) => r.data),
@@ -26,7 +29,7 @@ export const authApi = {
     apiClient.post<void>("/auth/reset-password", body).then((r) => r.data),
 
   changePassword: (body: ChangePasswordRequest) =>
-    apiClient.put<void>("/auth/change-password", body).then((r) => r.data),
+    apiClient.post<void>("/auth/change-password", body).then((r) => r.data),
 
   logout: () =>
     apiClient.post<void>("/auth/logout").then((r) => r.data),

@@ -27,10 +27,10 @@ export interface ChangePasswordRequest {
 
 export interface UserDTO {
   id: string;
+  fullName: string;
   email: string;
-  phoneNumber: string;
-  role: "CUSTOMER" | "ADMIN";
-  active: boolean;
+  phoneNumber?: string;
+  role: "CUSTOMER" | "ADMIN" | "SUPER_ADMIN";
 }
 
 export interface AuthResponse {

@@ -13,24 +13,24 @@ import type { PagedResponse } from "@/lib/types/common";
 
 export const catalogApi = {
   // ── Categories ──────────────────────────────────────────────────────────
-  getCategories: () =>
-    apiClient.get<CategoryDTO[]>("/catalog/categories").then((r) => r.data),
+  getCategories: (tree = false) =>
+    apiClient.get<CategoryDTO[]>("/categories", { params: { tree } }).then((r) => r.data),
 
   getCategory: (slug: string) =>
-    apiClient.get<CategoryDTO>(`/catalog/categories/${slug}`).then((r) => r.data),
+    apiClient.get<CategoryDTO>(`/categories/${slug}`).then((r) => r.data),
 
   // ── Products ────────────────────────────────────────────────────────────
   getProducts: (params?: ProductFilterParams) =>
     apiClient
-      .get<PagedResponse<ProductListItem>>("/catalog/products", { params })
+      .get<PagedResponse<ProductListItem>>("/products", { params })
       .then((r) => r.data),
 
   getProduct: (slug: string) =>
-    apiClient.get<ProductDTO>(`/catalog/products/${slug}`).then((r) => r.data),
+    apiClient.get<ProductDTO>(`/products/${slug}`).then((r) => r.data),
 
   // ── Pricing ─────────────────────────────────────────────────────────────
   checkPrice: (body: PriceCheckRequest) =>
-    apiClient.post<PriceCheckResponse>("/catalog/pricing/check", body).then((r) => r.data),
+    apiClient.post<PriceCheckResponse>("/pricing/check", body).then((r) => r.data),
 };
 
 // ── Admin catalog ────────────────────────────────────────────────────────
