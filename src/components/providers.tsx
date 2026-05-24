@@ -1,15 +1,18 @@
 "use client";
 
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useRef, type ReactNode } from "react";
+import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
 import { registerAuthStore } from "@/lib/api/client";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { useAuthSync } from "@/lib/hooks/useAuthSync";
+import { getApiError } from "@/lib/errors";
 
 function AuthStoreRegistrar() {
   useAuthSync();
-  const store = useAuthStore();
+  // store reference only used for registering — suppress the lint warning
+  useAuthStore();
   const registered = useRef(false);
 
   useEffect(() => {
@@ -31,10 +34,29 @@ function AuthStoreRegistrar() {
 
 function makeQueryClient() {
   return new QueryClient({
+    // Surface unhandled query errors as toasts so every page gets basic
+    // error feedback without needing per-hook error handling.
+    queryCache: new QueryCache({
+      onError(error, query) {
+        // Don't toast for queries that are already handling errors locally
+        // (they set meta.silent = true).
+        if (query.meta?.silent) return;
+
+        const message = getApiError(error);
+        // Deduplicate by error message to avoid spamming
+        toast.error(message, { id: message });
+      },
+    }),
     defaultOptions: {
       queries: {
         staleTime: 60_000,
-        retry: 1,
+        retry: (failureCount, error) => {
+          // Don't retry on 4xx client errors
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          const status = (error as any)?.response?.status;
+          if (status && status >= 400 && status < 500) return false;
+          return failureCount < 1;
+        },
         refetchOnWindowFocus: false,
       },
     },
@@ -60,7 +82,7 @@ export function Providers({ children }: { children: ReactNode }) {
     <QueryClientProvider client={queryClient}>
       <AuthStoreRegistrar />
       {children}
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position="top-right" closeButton />
     </QueryClientProvider>
   );
 }

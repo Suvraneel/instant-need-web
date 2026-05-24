@@ -1,6 +1,7 @@
 import axios, { type AxiosInstance, type InternalAxiosRequestConfig } from "axios";
+import { env } from "@/lib/env";
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8080/api/v1";
+const BASE_URL = env.apiUrl;
 
 // Lazily imported to avoid circular deps at module init time
 let getAccessToken: () => string | null;

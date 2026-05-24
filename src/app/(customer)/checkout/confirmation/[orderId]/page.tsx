@@ -9,6 +9,7 @@ import {
   CreditCard,
   ArrowRight,
   ClipboardList,
+  Printer,
 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -52,7 +53,7 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
   }
 
   return (
-    <div className="max-w-2xl mx-auto px-4 py-12 space-y-8">
+    <div className="max-w-2xl mx-auto px-4 py-12 space-y-8 print:py-4 print:px-0">
       {/* Success header */}
       <div className="text-center space-y-3">
         <div className="flex justify-center">
@@ -167,8 +168,8 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
         </div>
       </div>
 
-      {/* CTAs */}
-      <div className="flex flex-col sm:flex-row gap-3 pt-2">
+      {/* CTAs — hidden on print */}
+      <div className="flex flex-col sm:flex-row gap-3 pt-2 print:hidden">
         <Link
           href={`/account/orders/${order.id}`}
           className={cn(buttonVariants(), "flex-1 justify-center")}
@@ -181,6 +182,14 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
         >
           Continue shopping
         </Link>
+        <button
+          onClick={() => window.print()}
+          className={cn(buttonVariants({ variant: "ghost" }), "sm:ml-auto")}
+          aria-label="Print order confirmation"
+        >
+          <Printer className="h-4 w-4 mr-2" />
+          Print
+        </button>
       </div>
     </div>
   );

@@ -21,6 +21,7 @@ import {
 } from "@/components/ui/select";
 
 import { useAdminOrder, useUpdateOrderStatus } from "@/lib/hooks/useAdmin";
+import { getApiError } from "@/lib/errors";
 import { formatCurrency } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/types/order";
 import { buttonVariants } from "@/components/ui/button";
@@ -60,8 +61,8 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
       await updateStatus.mutateAsync({ status: selectedStatus });
       toast.success(`Order status updated to ${selectedStatus}`);
       setSelectedStatus("");
-    } catch {
-      toast.error("Failed to update status");
+    } catch (err) {
+      toast.error(getApiError(err, "Failed to update status"));
     }
   }
 

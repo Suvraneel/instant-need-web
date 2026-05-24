@@ -42,6 +42,7 @@ import { useAdminProducts, useDeleteProduct } from "@/lib/hooks/useAdmin";
 import { useCategories } from "@/lib/hooks/useCatalog";
 import { formatCurrency } from "@/lib/utils";
 import { toast } from "sonner";
+import { getApiError } from "@/lib/errors";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -70,8 +71,8 @@ function ProductsContent() {
     try {
       await deleteProduct.mutateAsync(id);
       toast.success(`"${name}" deleted`);
-    } catch {
-      toast.error("Failed to delete product");
+    } catch (err) {
+      toast.error(getApiError(err, "Failed to delete product"));
     }
   }
 

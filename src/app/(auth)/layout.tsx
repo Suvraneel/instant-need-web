@@ -12,7 +12,7 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
       </Link>
 
       {/* Card shell — pages fill this */}
-      <div className="w-full max-w-md">{children}</div>
+      <main id="main-content" className="w-full max-w-md">{children}</main>
 
       <p className="mt-8 text-xs text-muted-foreground">
         © {new Date().getFullYear()} InstantNeed. All rights reserved.

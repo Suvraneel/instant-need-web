@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import { Loader2 } from "lucide-react";
+import { getApiError } from "@/lib/errors";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -111,8 +112,8 @@ export function ProductForm({ product }: ProductFormProps) {
         toast.success("Product created");
         router.push("/admin/products");
       }
-    } catch {
-      toast.error(isEdit ? "Failed to update product" : "Failed to create product");
+    } catch (err) {
+      toast.error(getApiError(err, isEdit ? "Failed to update product" : "Failed to create product"));
     }
   }
 
