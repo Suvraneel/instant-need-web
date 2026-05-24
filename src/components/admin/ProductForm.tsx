@@ -28,6 +28,7 @@ import { useCategories } from "@/lib/hooks/useCatalog";
 import { useCreateProduct, useUpdateProduct } from "@/lib/hooks/useAdmin";
 import type { ProductDTO } from "@/lib/types/catalog";
 import { PricingTierEditor } from "./PricingTierEditor";
+import { ImageUploader } from "./ImageUploader";
 
 interface ProductFormProps {
   product?: ProductDTO; // undefined = create mode
@@ -108,9 +109,10 @@ export function ProductForm({ product }: ProductFormProps) {
         await updateProduct.mutateAsync(payload);
         toast.success("Product updated");
       } else {
-        await createProduct.mutateAsync(payload);
-        toast.success("Product created");
-        router.push("/admin/products");
+        const created = await createProduct.mutateAsync(payload);
+        toast.success("Product created — you can now upload images");
+        // Redirect to edit page so the admin can immediately upload images
+        router.push(`/admin/products/${created.id}/edit`);
       }
     } catch (err) {
       toast.error(getApiError(err, isEdit ? "Failed to update product" : "Failed to create product"));
@@ -251,6 +253,14 @@ export function ProductForm({ product }: ProductFormProps) {
             </div>
           </CardContent>
         </Card>
+
+        {/* Images — only shown when editing an existing product */}
+        {isEdit && product && (
+          <ImageUploader
+            productId={product.id}
+            images={product.images ?? []}
+          />
+        )}
 
         {/* Actions */}
         <div className="flex items-center gap-3">

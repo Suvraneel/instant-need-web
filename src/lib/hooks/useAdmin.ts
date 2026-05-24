@@ -58,6 +58,23 @@ export function useDeleteProduct() {
   });
 }
 
+export function useUploadProductImage(productId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ file, altText, sortOrder }: { file: File; altText?: string; sortOrder?: number }) =>
+      adminCatalogApi.uploadImage(productId, file, altText, sortOrder),
+    onSuccess: () => qc.invalidateQueries({ queryKey: adminProductKeys.detail(productId) }),
+  });
+}
+
+export function useDeleteProductImage(productId: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (imageId: string) => adminCatalogApi.deleteImage(productId, imageId),
+    onSuccess: () => qc.invalidateQueries({ queryKey: adminProductKeys.detail(productId) }),
+  });
+}
+
 // ── Orders ────────────────────────────────────────────────────────────────
 
 export const adminOrderKeys = {

@@ -52,15 +52,24 @@ export const adminCatalogApi = {
   deleteProduct: (id: string) =>
     apiClient.delete<void>(`/admin/products/${id}`).then((r) => r.data),
 
-  uploadImage: (productId: string, file: File) => {
+  uploadImage: (productId: string, file: File, altText = "", sortOrder = 0) => {
     const form = new FormData();
     form.append("file", file);
+    if (altText) form.append("altText", altText);
+    form.append("sortOrder", String(sortOrder));
     return apiClient
-      .post<{ url: string }>(`/admin/products/${productId}/images`, form, {
-        headers: { "Content-Type": "multipart/form-data" },
-      })
+      .post<{ id: string; url: string; altText?: string; sortOrder: number }>(
+        `/admin/products/${productId}/images`,
+        form,
+        { headers: { "Content-Type": "multipart/form-data" } }
+      )
       .then((r) => r.data);
   },
+
+  deleteImage: (productId: string, imageId: string) =>
+    apiClient
+      .delete<void>(`/admin/products/${productId}/images/${imageId}`)
+      .then((r) => r.data),
 
   getCategories: () =>
     apiClient.get<CategoryDTO[]>("/admin/categories").then((r) => r.data),

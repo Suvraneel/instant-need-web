@@ -76,8 +76,8 @@ const nextConfig: NextConfig = {
   },
 
   // ── Output ────────────────────────────────────────────────────────────
-  // Uncomment for standalone Docker / serverless builds:
-  // output: "standalone",
+  // Standalone mode: bundles only what's needed to run in Docker / serverless.
+  output: "standalone",
 
   // ── TypeScript ───────────────────────────────────────────────────────
   // Fail CI on type errors (default false = do NOT ignore)
