@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 
+const API_ORIGIN = process.env.API_ORIGIN?.replace(/\/$/, "");
+
 const SECURITY_HEADERS = [
   // Prevent DNS pre-fetch leaking referrer info
   { key: "X-DNS-Prefetch-Control", value: "on" },
@@ -17,6 +19,20 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
+  // ── API rewrite proxy ─────────────────────────────────────────────────
+  async rewrites() {
+    if (!API_ORIGIN) {
+      return [];
+    }
+
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination: `${API_ORIGIN}/api/v1/:path*`,
+      },
+    ];
+  },
+
   // ── Security headers ──────────────────────────────────────────────────
   async headers() {
     return [
