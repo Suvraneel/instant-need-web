@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { useCartStore } from "@/lib/stores/cartStore";
 import { useUIStore } from "@/lib/stores/uiStore";
@@ -132,10 +132,15 @@ export function Navbar() {
         )}
 
         {/* Mobile menu */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={() => setMobileMenuOpen(true)}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetTrigger render={<Button variant="ghost" size="icon" className="md:hidden" />}>
-            <Menu className="h-5 w-5" />
-          </SheetTrigger>
           <SheetContent side="left" className="w-72">
             <Link
               href="/home"
@@ -145,39 +150,39 @@ export function Navbar() {
               <Package2 className="h-6 w-6 text-primary" />
               InstantNeed
             </Link>
-            <nav className="flex flex-col gap-4">
+            <nav className="flex flex-col">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-base font-medium hover:text-primary transition-colors"
+                  className="text-base font-medium py-3 pl-2 border-b border-border/50 hover:text-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
-              <hr className="my-2" />
+              <div className="my-4" />
               {isAuthenticated ? (
                 <>
-                  <Link href="/account/profile" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/account/profile" className="text-base py-3 pl-2 border-b border-border/50 hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                     My Profile
                   </Link>
-                  <Link href="/account/orders" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/account/orders" className="text-base py-3 pl-2 border-b border-border/50 hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                     My Orders
                   </Link>
                   <button
                     onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                    className="text-left text-destructive"
+                    className="text-left text-base py-3 pl-2 text-destructive"
                   >
                     Log out
                   </button>
                 </>
               ) : (
                 <>
-                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/login" className="text-base py-3 pl-2 border-b border-border/50 hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                     Sign in
                   </Link>
-                  <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/register" className="text-base py-3 pl-2 hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                     Get started
                   </Link>
                 </>
