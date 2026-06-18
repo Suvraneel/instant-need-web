@@ -94,7 +94,7 @@ export default function HomePage() {
           </h1>
           <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto">
             Browse thousands of B2B products, unlock volume discounts, and manage
-            your business orders — all in one place.
+            your business orders, all in one place.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/products" className={cn(buttonVariants({ size: "lg" }))}>
