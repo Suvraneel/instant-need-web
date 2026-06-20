@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const API_ORIGIN = process.env.API_ORIGIN?.replace(/\/$/, "");
-
 const SECURITY_HEADERS = [
   // Prevent DNS pre-fetch leaking referrer info
   { key: "X-DNS-Prefetch-Control", value: "on" },
@@ -19,20 +17,6 @@ const SECURITY_HEADERS = [
 ];
 
 const nextConfig: NextConfig = {
-  // ── API rewrite proxy ─────────────────────────────────────────────────
-  async rewrites() {
-    if (!API_ORIGIN) {
-      return [];
-    }
-
-    return [
-      {
-        source: "/api/v1/:path*",
-        destination: `${API_ORIGIN}/api/v1/:path*`,
-      },
-    ];
-  },
-
   // ── Security headers ──────────────────────────────────────────────────
   async headers() {
     return [
@@ -96,7 +80,7 @@ const nextConfig: NextConfig = {
   // Vercel server-side forwards to EC2 — no browser CORS preflight, no mixed content.
   // Set NEXT_PUBLIC_API_URL=/api/v1 on Vercel (relative URL).
   async rewrites() {
-    const backendUrl = process.env.BACKEND_URL ?? "http://ec2-54-82-251-88.compute-1.amazonaws.com:8080";
+    const backendUrl = process.env.API_ORIGIN ?? "http://ec2-35-171-29-245.compute-1.amazonaws.com:8080";
     return [
       {
         source: "/api/v1/:path*",
