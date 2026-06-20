@@ -22,11 +22,9 @@ export function useCategories(tree = false) {
 }
 
 export function useCategory(slug: string) {
-  return useQuery({
-    queryKey: catalogKeys.category(slug),
-    queryFn: () => catalogApi.getCategory(slug),
-    enabled: !!slug,
-  });
+  const { data: categories, isLoading } = useCategories();
+  const category = categories?.find((c) => c.slug === slug);
+  return { data: category, isLoading };
 }
 
 export function useProducts(params?: ProductFilterParams) {
