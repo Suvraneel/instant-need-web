@@ -46,8 +46,8 @@ import {
   useCreateCategory,
   useUpdateCategory,
   useDeleteCategory,
+  useUploadCategoryImage,
 } from "@/lib/hooks/useAdmin";
-import { adminCatalogApi } from "@/lib/api/catalog";
 import { categorySchema, type CategoryFormData } from "@/lib/validations/admin";
 import type { CategoryDTO } from "@/lib/types/catalog";
 import { getApiError } from "@/lib/errors";
@@ -64,6 +64,7 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
   const isEdit = !!editing;
   const createCategory = useCreateCategory();
   const updateCategory = useUpdateCategory();
+  const uploadImage = useUploadCategoryImage();
 
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(editing?.imageUrl ?? null);
@@ -128,7 +129,7 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
       }
 
       if (pendingFile) {
-        await adminCatalogApi.uploadCategoryImage(categoryId, pendingFile);
+        await uploadImage.mutateAsync({ id: categoryId, file: pendingFile });
       }
 
       toast.success(isEdit ? `"${data.name}" updated` : `"${data.name}" created`);

@@ -179,6 +179,15 @@ export function useDeleteCategory() {
   });
 }
 
+export function useUploadCategoryImage() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, file }: { id: string; file: File }) =>
+      adminCatalogApi.uploadCategoryImage(id, file),
+    onSuccess: () => qc.invalidateQueries({ queryKey: adminCategoryKeys.all }),
+  });
+}
+
 // ── Pricing tiers ─────────────────────────────────────────────────────────
 
 export const pricingTierKeys = {
