@@ -8,30 +8,30 @@ import type {
 
 export const customerApi = {
   getProfile: () =>
-    apiClient.get<CustomerProfileDTO>("/customers/me").then((r) => r.data),
+    apiClient.get<CustomerProfileDTO>("/me").then((r) => r.data),
 
   updateProfile: (body: UpdateProfileRequest) =>
-    apiClient.put<CustomerProfileDTO>("/customers/me", body).then((r) => r.data),
+    apiClient.put<CustomerProfileDTO>("/me", body).then((r) => r.data),
 
   getAddresses: () =>
-    apiClient.get<AddressDTO[]>("/customers/me/addresses").then((r) => r.data),
+    apiClient.get<AddressDTO[]>("/me/addresses").then((r) => r.data),
 
   createAddress: (body: CreateAddressRequest) =>
     apiClient
-      .post<AddressDTO>("/customers/me/addresses", body)
+      .post<AddressDTO>("/me/addresses", body)
       .then((r) => r.data),
 
   updateAddress: (id: string, body: Partial<CreateAddressRequest>) =>
     apiClient
-      .put<AddressDTO>(`/customers/me/addresses/${id}`, body)
+      .put<AddressDTO>(`/me/addresses/${id}`, body)
       .then((r) => r.data),
 
   deleteAddress: (id: string) =>
-    apiClient.delete<void>(`/customers/me/addresses/${id}`).then((r) => r.data),
+    apiClient.delete<void>(`/me/addresses/${id}`).then((r) => r.data),
 
   setDefaultAddress: (id: string) =>
     apiClient
-      .patch<AddressDTO>(`/customers/me/addresses/${id}/default`)
+      .patch<AddressDTO>(`/me/addresses/${id}/default`)
       .then((r) => r.data),
 };
 
