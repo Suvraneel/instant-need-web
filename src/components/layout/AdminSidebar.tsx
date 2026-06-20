@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import {
   LayoutDashboard,
   Package,
+  Tag,
+  CircleDollarSign,
   ShoppingBag,
   Users,
   BarChart3,
@@ -13,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { InstantNeedIcon, InstantNeedWordmark } from "@/components/ui/brand";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useUIStore } from "@/lib/stores/uiStore";
@@ -20,6 +23,8 @@ import { useUIStore } from "@/lib/stores/uiStore";
 const NAV_ITEMS = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard, exact: true },
   { label: "Products", href: "/admin/products", icon: Package },
+  { label: "Categories", href: "/admin/categories", icon: Tag },
+  { label: "Pricing", href: "/admin/pricing", icon: CircleDollarSign },
   { label: "Orders", href: "/admin/orders", icon: ShoppingBag },
   { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Reports", href: "/admin/reports", icon: BarChart3 },
@@ -44,10 +49,8 @@ export function AdminSidebar() {
     >
       {/* Logo */}
       <div className="flex h-16 items-center border-b px-4 gap-2 overflow-hidden">
-        <Package2 className="h-6 w-6 text-primary shrink-0" />
-        {sidebarOpen && (
-          <span className="font-bold text-base whitespace-nowrap">InstantNeed</span>
-        )}
+        <InstantNeedIcon size={24} className="shrink-0" />
+        {sidebarOpen && <InstantNeedWordmark className="text-base whitespace-nowrap" />}
       </div>
 
       {/* Nav */}
@@ -62,7 +65,7 @@ export function AdminSidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-md px-3 py-2 text-sm font-medium transition-colors",
                 active
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary/10 text-primary font-semibold"
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >

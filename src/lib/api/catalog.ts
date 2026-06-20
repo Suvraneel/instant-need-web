@@ -6,6 +6,8 @@ import type {
   ProductFilterParams,
   CreateProductRequest,
   UpdateProductRequest,
+  PricingTierDTO,
+  PricingTierRequest,
   PriceCheckRequest,
   PriceCheckResponse,
 } from "@/lib/types/catalog";
@@ -47,10 +49,20 @@ export const adminCatalogApi = {
     apiClient.post<ProductDTO>("/admin/products", body).then((r) => r.data),
 
   updateProduct: (id: string, body: UpdateProductRequest) =>
-    apiClient.put<ProductDTO>(`/admin/products/${id}`, body).then((r) => r.data),
+    apiClient.patch<ProductDTO>(`/admin/products/${id}`, body).then((r) => r.data),
 
   deleteProduct: (id: string) =>
     apiClient.delete<void>(`/admin/products/${id}`).then((r) => r.data),
+
+  getPricingTiers: (productId: string) =>
+    apiClient
+      .get<PricingTierDTO[]>(`/admin/products/${productId}/pricing-tiers`)
+      .then((r) => r.data),
+
+  replacePricingTiers: (productId: string, tiers: PricingTierRequest[]) =>
+    apiClient
+      .put<PricingTierDTO[]>(`/admin/products/${productId}/pricing-tiers`, tiers)
+      .then((r) => r.data),
 
   uploadImage: (productId: string, file: File, altText = "", sortOrder = 0) => {
     const form = new FormData();
@@ -76,4 +88,10 @@ export const adminCatalogApi = {
 
   createCategory: (body: Partial<CategoryDTO>) =>
     apiClient.post<CategoryDTO>("/admin/categories", body).then((r) => r.data),
+
+  updateCategory: (id: string, body: Partial<CategoryDTO>) =>
+    apiClient.patch<CategoryDTO>(`/admin/categories/${id}`, body).then((r) => r.data),
+
+  deleteCategory: (id: string) =>
+    apiClient.delete<void>(`/admin/categories/${id}`).then((r) => r.data),
 };

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Package2 } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { InstantNeedIcon, InstantNeedWordmark } from "@/components/ui/brand";
 
 const FOOTER_LINKS = {
   Company: [
@@ -26,9 +27,9 @@ export function Footer() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
-            <Link href="/" className="flex items-center gap-2 font-bold text-lg mb-4">
-              <Package2 className="h-6 w-6 text-primary" />
-              InstantNeed
+            <Link href="/" className="flex items-center gap-2 mb-4">
+              <InstantNeedIcon size={28} />
+              <InstantNeedWordmark className="text-lg" />
             </Link>
             <p className="text-sm text-muted-foreground">
               India&apos;s trusted B2B wholesale ordering platform for modern businesses.

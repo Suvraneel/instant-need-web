@@ -91,9 +91,19 @@ const nextConfig: NextConfig = {
     },
   },
 
-  // ── Output ────────────────────────────────────────────────────────────
-  // Standalone mode: bundles only what's needed to run in Docker / serverless.
-  output: "standalone",
+  // ── API proxy (eliminates CORS + mixed-content) ───────────────────────
+  // Browser calls https://instant-need-web-one.vercel.app/api/v1/* (same origin, HTTPS).
+  // Vercel server-side forwards to EC2 — no browser CORS preflight, no mixed content.
+  // Set NEXT_PUBLIC_API_URL=/api/v1 on Vercel (relative URL).
+  async rewrites() {
+    const backendUrl = process.env.BACKEND_URL ?? "http://ec2-54-82-251-88.compute-1.amazonaws.com:8080";
+    return [
+      {
+        source: "/api/v1/:path*",
+        destination: `${backendUrl}/api/v1/:path*`,
+      },
+    ];
+  },
 
   // ── TypeScript ───────────────────────────────────────────────────────
   // Fail CI on type errors (default false = do NOT ignore)

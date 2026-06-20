@@ -67,23 +67,27 @@ export default function DashboardPage() {
                 title="Revenue This Month"
                 value={formatCurrency(summary?.revenueThisMonth ?? 0, "INR")}
                 icon={IndianRupee}
+                color="green"
               />
               <StatCard
                 title="Total Orders"
                 value={summary?.totalOrders ?? 0}
                 sub={`${summary?.pendingOrders ?? 0} pending`}
                 icon={ShoppingCart}
+                color="blue"
               />
               <StatCard
                 title="Customers"
                 value={summary?.totalCustomers ?? 0}
                 sub={`+${summary?.newCustomersThisMonth ?? 0} this month`}
                 icon={Users}
+                color="purple"
               />
               <StatCard
                 title="Active Products"
                 value={summary?.activeProducts ?? 0}
                 icon={Package}
+                color="amber"
               />
             </>
           )}

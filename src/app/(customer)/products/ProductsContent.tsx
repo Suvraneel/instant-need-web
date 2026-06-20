@@ -89,11 +89,13 @@ export function ProductsContent() {
             />
           </div>
           <Select
-            defaultValue={sort}
+            value={sort}
             onValueChange={(v) => updateParam("sort", v)}
           >
             <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Sort by" />
+              <SelectValue placeholder="Sort by">
+                {SORT_OPTIONS.find((o) => o.value === sort)?.label ?? "Sort by"}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent>
               {SORT_OPTIONS.map((o) => (

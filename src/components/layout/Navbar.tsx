@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ShoppingCart, User, Menu, Package2, Search, LogOut } from "lucide-react";
+import { InstantNeedIcon, InstantNeedWordmark } from "@/components/ui/brand";
 import { Button, buttonVariants } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,7 +13,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { useCartStore } from "@/lib/stores/cartStore";
 import { useUIStore } from "@/lib/stores/uiStore";
@@ -49,9 +50,9 @@ export function Navbar() {
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="max-w-7xl mx-auto flex h-16 items-center px-4 gap-6">
         {/* Logo */}
-        <Link href="/home" className="flex items-center gap-2 font-bold text-lg shrink-0">
-          <Package2 className="h-6 w-6 text-primary" />
-          <span>InstantNeed</span>
+        <Link href="/home" className="flex items-center gap-2 shrink-0">
+          <InstantNeedIcon size={28} />
+          <InstantNeedWordmark className="text-lg" />
         </Link>
 
         {/* Desktop nav */}
@@ -132,52 +133,57 @@ export function Navbar() {
         )}
 
         {/* Mobile menu */}
+        <Button
+          variant="ghost"
+          size="icon"
+          className="md:hidden"
+          onClick={() => setMobileMenuOpen(true)}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
-          <SheetTrigger render={<Button variant="ghost" size="icon" className="md:hidden" />}>
-            <Menu className="h-5 w-5" />
-          </SheetTrigger>
           <SheetContent side="left" className="w-72">
             <Link
               href="/home"
-              className="flex items-center gap-2 font-bold text-lg mb-8"
+              className="flex items-center gap-2 mb-8"
               onClick={() => setMobileMenuOpen(false)}
             >
-              <Package2 className="h-6 w-6 text-primary" />
-              InstantNeed
+              <InstantNeedIcon size={28} />
+              <InstantNeedWordmark className="text-lg" />
             </Link>
-            <nav className="flex flex-col gap-4">
+            <nav className="flex flex-col">
               {NAV_LINKS.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-base font-medium hover:text-primary transition-colors"
+                  className="text-base font-medium py-3 pl-2 border-b border-border/50 hover:text-primary transition-colors"
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
-              <hr className="my-2" />
+              <div className="my-4" />
               {isAuthenticated ? (
                 <>
-                  <Link href="/account/profile" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/account/profile" className="text-base py-3 pl-2 border-b border-border/50 hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                     My Profile
                   </Link>
-                  <Link href="/account/orders" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/account/orders" className="text-base py-3 pl-2 border-b border-border/50 hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                     My Orders
                   </Link>
                   <button
                     onClick={() => { handleLogout(); setMobileMenuOpen(false); }}
-                    className="text-left text-destructive"
+                    className="text-left text-base py-3 pl-2 text-destructive"
                   >
                     Log out
                   </button>
                 </>
               ) : (
                 <>
-                  <Link href="/login" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/login" className="text-base py-3 pl-2 border-b border-border/50 hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                     Sign in
                   </Link>
-                  <Link href="/register" onClick={() => setMobileMenuOpen(false)}>
+                  <Link href="/register" className="text-base py-3 pl-2 hover:text-primary transition-colors" onClick={() => setMobileMenuOpen(false)}>
                     Get started
                   </Link>
                 </>

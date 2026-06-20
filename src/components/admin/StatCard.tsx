@@ -4,16 +4,27 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
 
+type StatCardColor = "blue" | "green" | "purple" | "amber";
+
+const COLOR_MAP: Record<StatCardColor, { bg: string; icon: string }> = {
+  blue:   { bg: "bg-blue-50",   icon: "text-blue-600" },
+  green:  { bg: "bg-green-50",  icon: "text-green-600" },
+  purple: { bg: "bg-purple-50", icon: "text-purple-600" },
+  amber:  { bg: "bg-amber-50",  icon: "text-amber-600" },
+};
+
 interface StatCardProps {
   title: string;
   value: string | number;
   sub?: string;
   icon: LucideIcon;
   trend?: number; // positive = good, negative = bad
+  color?: StatCardColor;
   className?: string;
 }
 
-export function StatCard({ title, value, sub, icon: Icon, trend, className }: StatCardProps) {
+export function StatCard({ title, value, sub, icon: Icon, trend, color = "blue", className }: StatCardProps) {
+  const { bg, icon } = COLOR_MAP[color];
   return (
     <Card className={cn("", className)}>
       <CardContent className="p-5">
@@ -25,8 +36,8 @@ export function StatCard({ title, value, sub, icon: Icon, trend, className }: St
             <p className="text-2xl font-bold tabular-nums">{value}</p>
             {sub && <p className="text-xs text-muted-foreground">{sub}</p>}
           </div>
-          <div className="h-10 w-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
-            <Icon className="h-5 w-5 text-primary" />
+          <div className={cn("h-10 w-10 rounded-lg flex items-center justify-center shrink-0", bg)}>
+            <Icon className={cn("h-5 w-5", icon)} />
           </div>
         </div>
         {trend !== undefined && (
