@@ -23,7 +23,7 @@ export const customerApi = {
 
   updateAddress: (id: string, body: Partial<CreateAddressRequest>) =>
     apiClient
-      .put<AddressDTO>(`/me/addresses/${id}`, body)
+      .patch<AddressDTO>(`/me/addresses/${id}`, body)
       .then((r) => r.data),
 
   deleteAddress: (id: string) =>
