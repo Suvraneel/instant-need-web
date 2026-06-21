@@ -16,10 +16,10 @@ import { useCallback } from "react";
 const PAGE_SIZE = 20;
 
 const SORT_OPTIONS = [
-  { label: "Newest first", value: "createdAt,desc" },
-  { label: "Price: low to high", value: "basePrice,asc" },
-  { label: "Price: high to low", value: "basePrice,desc" },
-  { label: "Name A–Z", value: "name,asc" },
+  { label: "Newest first", value: "" },
+  { label: "Price: low to high", value: "price_asc" },
+  { label: "Price: high to low", value: "price_desc" },
+  { label: "Name A–Z", value: "name_asc" },
 ];
 
 export function ProductsContent() {
@@ -33,7 +33,7 @@ export function ProductsContent() {
   const minPrice = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined;
   const maxPrice = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined;
   const inStock = searchParams.get("inStock") === "true" ? true : undefined;
-  const sort = searchParams.get("sort") ?? "createdAt,desc";
+  const sort = searchParams.get("sort") ?? "";
 
   const { data, isLoading } = useProducts({
     search,
@@ -91,11 +91,10 @@ export function ProductsContent() {
           <Select
             value={sort}
             onValueChange={(v) => updateParam("sort", v)}
+            items={SORT_OPTIONS.map((o) => ({ value: o.value, label: o.label }))}
           >
             <SelectTrigger className="w-full sm:w-48">
-              <SelectValue placeholder="Sort by">
-                {SORT_OPTIONS.find((o) => o.value === sort)?.label ?? "Sort by"}
-              </SelectValue>
+              <SelectValue placeholder="Sort by" />
             </SelectTrigger>
             <SelectContent>
               {SORT_OPTIONS.map((o) => (
