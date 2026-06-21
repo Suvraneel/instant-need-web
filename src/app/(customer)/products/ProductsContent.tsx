@@ -22,7 +22,12 @@ const SORT_OPTIONS = [
   { label: "Name A–Z", value: "name_asc" },
 ];
 
-export function ProductsContent() {
+interface ProductsContentProps {
+  /** When set (e.g. on a category page), locks the category filter to this ID. */
+  fixedCategoryId?: string;
+}
+
+export function ProductsContent({ fixedCategoryId }: ProductsContentProps = {}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -37,7 +42,7 @@ export function ProductsContent() {
   useEffect(() => {
     setSearchInput(search ?? "");
   }, [search]);
-  const categoryId = searchParams.get("categoryId") ?? undefined;
+  const categoryId = fixedCategoryId ?? searchParams.get("categoryId") ?? undefined;
   const minPrice = searchParams.get("minPrice") ? Number(searchParams.get("minPrice")) : undefined;
   const maxPrice = searchParams.get("maxPrice") ? Number(searchParams.get("maxPrice")) : undefined;
   const inStock = searchParams.get("inStock") === "true" ? true : undefined;
@@ -75,7 +80,7 @@ export function ProductsContent() {
     <div className="flex gap-8">
       {/* Filter sidebar — hidden on mobile, shown on md+ */}
       <div className="hidden md:block w-52 shrink-0">
-        <FilterSidebar />
+        <FilterSidebar fixedCategoryId={fixedCategoryId} />
       </div>
 
       {/* Main content */}

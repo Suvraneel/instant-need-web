@@ -11,13 +11,17 @@ import { Badge } from "@/components/ui/badge";
 import { useCategories } from "@/lib/hooks/useCatalog";
 import { cn } from "@/lib/utils";
 
-export function FilterSidebar() {
+interface FilterSidebarProps {
+  fixedCategoryId?: string;
+}
+
+export function FilterSidebar({ fixedCategoryId }: FilterSidebarProps = {}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const { data: categories } = useCategories();
 
-  const currentCategory = searchParams.get("categoryId") ?? "";
+  const currentCategory = fixedCategoryId ?? searchParams.get("categoryId") ?? "";
   const minPrice = searchParams.get("minPrice") ?? "";
   const maxPrice = searchParams.get("maxPrice") ?? "";
   const inStock = searchParams.get("inStock") === "true";
