@@ -223,18 +223,24 @@ export default function CheckoutPage() {
             </div>
           </div>
 
-          {/* Right column — order summary + CTA (sticky so button stays visible on scroll) */}
-          <div className="md:col-span-1 space-y-4 md:sticky md:top-6 md:self-start md:max-h-[calc(100vh-3rem)] md:overflow-y-auto">
-            <OrderSummaryPanel />
-            <Button
-              type="submit"
-              size="lg"
-              className="w-full"
-              disabled={isPending}
-            >
-              {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-              Place order
-            </Button>
+          {/* Right column — order summary + CTA */}
+          <div className="md:col-span-1 md:sticky md:top-6 md:self-start md:flex md:flex-col md:max-h-[calc(100vh-3rem)]">
+            {/* Summary scrolls if too tall */}
+            <div className="md:overflow-y-auto md:flex-1 space-y-4">
+              <OrderSummaryPanel />
+            </div>
+            {/* Button always pinned at bottom of the sticky panel */}
+            <div className="pt-4">
+              <Button
+                type="submit"
+                size="lg"
+                className="w-full"
+                disabled={isPending}
+              >
+                {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                Place order
+              </Button>
+            </div>
           </div>
         </div>
       </form>
