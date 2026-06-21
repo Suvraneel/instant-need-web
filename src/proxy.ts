@@ -11,7 +11,7 @@ const PUBLIC_PATHS = [
 ];
 
 const ADMIN_PREFIX = "/admin";
-const AUTH_PATHS = ["/account", "/checkout", "/cart"];
+const AUTH_PATHS = ["/account", "/checkout"];
 
 function isPublic(pathname: string): boolean {
   return PUBLIC_PATHS.some(
