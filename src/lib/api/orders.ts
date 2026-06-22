@@ -3,6 +3,7 @@ import type {
   OrderDTO,
   OrderListItem,
   PlaceOrderRequest,
+  PlaceOrderResponse,
   UpdateOrderStatusRequest,
 } from "@/lib/types/order";
 import type { AdminOrderFilterParams, AdminOrderSummary } from "@/lib/types/admin";
@@ -19,7 +20,7 @@ export const ordersApi = {
     apiClient.get<OrderDTO>(`/orders/${id}`).then((r) => r.data),
 
   placeOrder: (body: PlaceOrderRequest) =>
-    apiClient.post<OrderDTO>("/orders", body).then((r) => r.data),
+    apiClient.post<PlaceOrderResponse>("/orders", body).then((r) => r.data),
 
   cancelOrder: (id: string) =>
     apiClient.post<OrderDTO>(`/orders/${id}/cancel`).then((r) => r.data),

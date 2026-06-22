@@ -81,6 +81,13 @@ export interface PlaceOrderRequest {
   notes?: string;
 }
 
+export interface PlaceOrderResponse {
+  id: string;
+  orderNumber: string;
+  status: string;
+  message: string;
+}
+
 export interface UpdateOrderStatusRequest {
   status: OrderStatus;
 }
