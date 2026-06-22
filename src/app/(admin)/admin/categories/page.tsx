@@ -196,7 +196,7 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
 
           {/* Image upload */}
           <div className="space-y-2">
-            <Label>Category Image {!isEdit && <span className="text-destructive">*</span>}</Label>
+            <Label>Category Image {!isEdit && <span>*</span>}</Label>
             {previewUrl ? (
               <div className="relative w-full aspect-video rounded-lg overflow-hidden border bg-muted">
                 <Image
