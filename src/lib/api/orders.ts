@@ -5,7 +5,7 @@ import type {
   PlaceOrderRequest,
   UpdateOrderStatusRequest,
 } from "@/lib/types/order";
-import type { AdminOrderFilterParams } from "@/lib/types/admin";
+import type { AdminOrderFilterParams, AdminOrderSummary } from "@/lib/types/admin";
 import type { PagedResponse } from "@/lib/types/common";
 
 export const ordersApi = {
@@ -28,7 +28,7 @@ export const ordersApi = {
 export const adminOrdersApi = {
   getOrders: (params?: AdminOrderFilterParams) =>
     apiClient
-      .get<PagedResponse<OrderDTO>>("/admin/orders", { params })
+      .get<PagedResponse<AdminOrderSummary>>("/admin/orders", { params })
       .then((r) => r.data),
 
   getOrder: (id: string) =>

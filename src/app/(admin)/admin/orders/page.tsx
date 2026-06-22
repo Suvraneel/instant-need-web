@@ -127,14 +127,7 @@ function OrdersContent() {
                       {order.orderNumber}
                     </TableCell>
                     <TableCell className="text-sm">
-                      <div>
-                        <p className="font-medium">{order.customerName ?? "—"}</p>
-                        {order.customerBusinessName && (
-                          <p className="text-xs text-muted-foreground">
-                            {order.customerBusinessName}
-                          </p>
-                        )}
-                      </div>
+                      <p className="font-medium">{order.customerName || "—"}</p>
                     </TableCell>
                     <TableCell>
                       <Badge
@@ -145,7 +138,7 @@ function OrdersContent() {
                       </Badge>
                     </TableCell>
                     <TableCell className="text-right text-sm">
-                      {order.items?.length ?? "—"}
+                      {order.itemCount}
                     </TableCell>
                     <TableCell className="text-right text-sm font-medium">
                       {formatCurrency(order.totalAmount, order.currencyCode)}

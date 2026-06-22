@@ -43,6 +43,18 @@ export interface CustomerActivityEntry {
   lastOrderAt: string;
 }
 
+export interface AdminOrderSummary {
+  id: string;
+  orderNumber: string;
+  status: string;
+  customerName: string;
+  paymentMethod: string;
+  totalAmount: number;
+  currencyCode: string;
+  itemCount: number;
+  placedAt: string;
+}
+
 export interface AdminOrderFilterParams {
   status?: OrderStatus;
   from?: string;
