@@ -113,17 +113,9 @@ export function ShippingAddressForm({ form }: ShippingAddressFormProps) {
         </div>
       </div>
 
-      <div className="flex items-center gap-2 pt-1">
-        <input
-          type="checkbox"
-          id="saveAddress"
-          className="h-4 w-4 rounded border accent-primary"
-          {...register("saveAddress")}
-        />
-        <Label htmlFor="saveAddress" className="text-sm font-normal cursor-pointer">
-          Save this address for future orders
-        </Label>
-      </div>
+      <p className="text-xs text-muted-foreground pt-1">
+        This address will be saved to your account for future orders.
+      </p>
     </div>
   );
 }
