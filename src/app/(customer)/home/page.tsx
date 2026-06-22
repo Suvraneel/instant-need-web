@@ -8,6 +8,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ProductCard, ProductCardSkeleton } from "@/components/catalog/ProductCard";
 import { useCategories, useProducts } from "@/lib/hooks/useCatalog";
+import { useAuthStore } from "@/lib/stores/authStore";
 import { cn } from "@/lib/utils";
 
 const FEATURES = [
@@ -84,6 +85,8 @@ function FeaturedProducts() {
 }
 
 export default function HomePage() {
+  const isAuthenticated = useAuthStore((s) => s.isAuthenticated)();
+
   return (
     <div className="flex flex-col">
       {/* Hero */}
@@ -159,9 +162,15 @@ export default function HomePage() {
         <div className="max-w-2xl mx-auto text-center space-y-5">
           <h2 className="text-2xl font-bold">Ready to start ordering?</h2>
           <p className="text-muted-foreground">Join thousands of businesses already using InstantNeed.</p>
-          <Link href="/register" className={cn(buttonVariants({ size: "lg" }))}>
-            Get started for free
-          </Link>
+          {isAuthenticated ? (
+            <Link href="/products" className={cn(buttonVariants({ size: "lg" }))}>
+              Browse products
+            </Link>
+          ) : (
+            <Link href="/register" className={cn(buttonVariants({ size: "lg" }))}>
+              Get started for free
+            </Link>
+          )}
         </div>
       </section>
     </div>

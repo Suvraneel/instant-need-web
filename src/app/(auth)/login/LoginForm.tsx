@@ -25,6 +25,7 @@ import { FormError } from "@/components/forms/FormError";
 import { loginSchema, type LoginFormData } from "@/lib/validations/auth";
 import { authApi } from "@/lib/api/auth";
 import { useAuthStore } from "@/lib/stores/authStore";
+import { getApiError } from "@/lib/errors";
 
 export function LoginForm() {
   const router = useRouter();
@@ -50,16 +51,13 @@ export function LoginForm() {
       login(res.user, res.accessToken, res.refreshToken);
       toast.success("Welcome back!");
       const redirect = searchParams.get("redirect");
-      if (res.user.role === "ADMIN") {
-        router.push(redirect ?? "/admin/dashboard");
-      } else {
-        router.push(redirect ?? "/home");
-      }
+      const destination = res.user.role === "ADMIN"
+        ? (redirect ?? "/admin/dashboard")
+        : (redirect ?? "/home");
+      router.refresh();
+      router.push(destination);
     } catch (err: unknown) {
-      const msg =
-        (err as { response?: { data?: { message?: string } } })?.response?.data
-          ?.message ?? "Invalid credentials. Please try again.";
-      setServerError(msg);
+      setServerError(getApiError(err, "Invalid credentials. Please try again."));
     }
   }
 
