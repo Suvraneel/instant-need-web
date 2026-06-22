@@ -194,6 +194,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
             tiers={product.pricingTiers}
             currencyCode={product.currencyCode}
             basePrice={product.basePrice}
+            mrp={product.mrp}
           />
 
           <Separator />

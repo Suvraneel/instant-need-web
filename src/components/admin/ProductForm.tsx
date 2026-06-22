@@ -70,6 +70,7 @@ export function ProductForm({ product }: ProductFormProps) {
       sku: "",
       description: "",
       categoryId: "",
+      mrp: undefined,
       basePrice: 0,
       currencyCode: "INR",
       stock: 0,
@@ -96,6 +97,7 @@ export function ProductForm({ product }: ProductFormProps) {
         sku: product.sku,
         description: product.description ?? "",
         categoryId: product.categoryId,
+        mrp: product.mrp ?? undefined,
         basePrice: product.basePrice,
         currencyCode: product.currencyCode,
         stock: product.stock,
@@ -120,7 +122,11 @@ export function ProductForm({ product }: ProductFormProps) {
       currencyCode: t.currencyCode,
     }));
 
-    const payload = { ...data, pricingTiers: tiers };
+    const payload = {
+      ...data,
+      mrp: data.mrp === "" || data.mrp === undefined ? undefined : data.mrp,
+      pricingTiers: tiers,
+    };
 
     try {
       if (isEdit) {
@@ -219,9 +225,23 @@ export function ProductForm({ product }: ProductFormProps) {
             <CardTitle className="text-base">Pricing & Stock</CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid sm:grid-cols-3 gap-4">
+            <div className="grid sm:grid-cols-4 gap-4">
               <div className="space-y-1">
-                <Label htmlFor="basePrice">Base Price (₹) *</Label>
+                <Label htmlFor="mrp">MRP (₹)</Label>
+                <Input
+                  id="mrp"
+                  type="number"
+                  min={0.01}
+                  step={0.01}
+                  {...register("mrp")}
+                  placeholder="0.00"
+                />
+                {errors.mrp && (
+                  <p className="text-xs text-destructive">{errors.mrp.message}</p>
+                )}
+              </div>
+              <div className="space-y-1">
+                <Label htmlFor="basePrice">Selling Price (₹) *</Label>
                 <Input
                   id="basePrice"
                   type="number"

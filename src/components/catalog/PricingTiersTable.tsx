@@ -5,13 +5,19 @@ interface PricingTiersTableProps {
   tiers: PricingTierDTO[];
   currencyCode: string;
   basePrice: number;
+  mrp?: number;
 }
 
-export function PricingTiersTable({ tiers, currencyCode, basePrice }: PricingTiersTableProps) {
+export function PricingTiersTable({ tiers, currencyCode, basePrice, mrp }: PricingTiersTableProps) {
   if (!tiers || tiers.length === 0) {
     return (
       <div className="rounded-lg border p-4 text-sm text-muted-foreground">
-        <p className="font-medium text-foreground mb-1">Base price</p>
+        <p className="font-medium text-foreground mb-1">Price</p>
+        {mrp && mrp > basePrice && (
+          <p className="text-sm text-muted-foreground line-through mb-0.5">
+            MRP {formatCurrency(mrp, currencyCode)}
+          </p>
+        )}
         <p className="text-xl font-bold text-foreground">
           {formatCurrency(basePrice, currencyCode)}
           <span className="text-sm font-normal text-muted-foreground ml-1">/ item</span>

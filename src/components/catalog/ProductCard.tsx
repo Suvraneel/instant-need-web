@@ -44,6 +44,11 @@ export function ProductCard({ product }: ProductCardProps) {
           <p className="text-xs text-muted-foreground font-mono">{product.sku}</p>
           <div className="flex items-end justify-between pt-1">
             <div>
+              {product.mrp && product.mrp > product.basePrice && (
+                <p className="text-xs text-muted-foreground line-through">
+                  MRP {formatCurrency(product.mrp, product.currencyCode)}
+                </p>
+              )}
               <p className="text-base font-semibold">
                 {formatCurrency(product.basePrice, product.currencyCode)}
               </p>

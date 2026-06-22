@@ -30,6 +30,7 @@ export interface ProductDTO {
   description?: string;
   categoryId: string;
   categoryName: string;
+  mrp?: number;
   basePrice: number;
   currencyCode: string;
   stock: number;
@@ -47,6 +48,7 @@ export interface ProductListItem {
   slug: string;
   sku: string;
   categoryName: string;
+  mrp?: number;
   basePrice: number;
   currencyCode: string;
   stock: number;

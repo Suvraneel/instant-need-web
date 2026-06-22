@@ -20,6 +20,7 @@ export const productSchema = z.object({
   sku: z.string().min(1, "SKU is required"),
   description: z.string().optional(),
   categoryId: z.string().min(1, "Category is required"),
+  mrp: z.coerce.number().positive("MRP must be positive").optional().or(z.literal("")),
   basePrice: z.coerce.number().positive("Base price must be positive"),
   currencyCode: z.string().default("INR"),
   stock: z.coerce.number().int().min(0, "Stock cannot be negative"),
