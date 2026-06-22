@@ -98,7 +98,7 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
               <div className="flex-1 min-w-0">
                 <p className="text-sm font-medium truncate">{item.productName}</p>
                 <p className="text-xs text-muted-foreground">
-                  {item.sku} · qty {item.quantity}
+                  {item.sku} · Quantity: {item.quantity}
                 </p>
               </div>
               <p className="text-sm font-medium shrink-0">
