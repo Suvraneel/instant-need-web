@@ -68,6 +68,7 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
 
   const [pendingFile, setPendingFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(editing?.imageUrl ?? null);
+  const [imageError, setImageError] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const {
@@ -86,6 +87,7 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
     reset();
     setPendingFile(null);
     setPreviewUrl(null);
+    setImageError(false);
     onClose();
   }
 
@@ -94,6 +96,7 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
     if (!file) return;
     setPendingFile(file);
     setPreviewUrl(URL.createObjectURL(file));
+    setImageError(false);
   }
 
   function clearImage() {
@@ -103,6 +106,11 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
   }
 
   async function onSubmit(data: CategoryFormData) {
+    if (!isEdit && !pendingFile) {
+      setImageError(true);
+      return;
+    }
+
     try {
       let categoryId: string;
 
@@ -188,7 +196,7 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
 
           {/* Image upload */}
           <div className="space-y-2">
-            <Label>Category Image</Label>
+            <Label>Category Image {!isEdit && <span className="text-destructive">*</span>}</Label>
             {previewUrl ? (
               <div className="relative w-full aspect-video rounded-lg overflow-hidden border bg-muted">
                 <Image
@@ -232,6 +240,9 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
               className="hidden"
               onChange={handleFileChange}
             />
+            {imageError && (
+              <p className="text-xs text-destructive">Category image is required</p>
+            )}
           </div>
 
           <DialogFooter className="pt-2">
