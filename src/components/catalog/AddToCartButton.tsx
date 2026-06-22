@@ -44,9 +44,10 @@ export function AddToCartButton({ product }: AddToCartButtonProps) {
       currencyCode: product.currencyCode,
       moq: product.moq,
       quantity: qty,
+      pricingTiers: product.pricingTiers ?? [],
     });
     toast.success(`${product.name} added to cart`, {
-      description: `${qty} units × ${product.currencyCode} ${product.basePrice}`,
+      description: `${qty} units added`,
     });
   }
 
