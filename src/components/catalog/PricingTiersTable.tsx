@@ -43,10 +43,17 @@ export function PricingTiersTable({ tiers, currencyCode, basePrice, mrp }: Prici
               {tier.minQty}
               {tier.maxQty ? `–${tier.maxQty}` : "+"} items
             </span>
-            <span className="text-sm font-semibold">
-              {formatCurrency(tier.unitPrice, tier.currencyCode)}
-              <span className="text-xs font-normal text-muted-foreground ml-1">/ item</span>
-            </span>
+            <div className="text-right">
+              {mrp && mrp > tier.unitPrice && (
+                <p className="text-xs text-muted-foreground line-through">
+                  MRP {formatCurrency(mrp, tier.currencyCode)}
+                </p>
+              )}
+              <span className="text-sm font-semibold">
+                {formatCurrency(tier.unitPrice, tier.currencyCode)}
+                <span className="text-xs font-normal text-muted-foreground ml-1">/ item</span>
+              </span>
+            </div>
           </div>
         ))}
       </div>
