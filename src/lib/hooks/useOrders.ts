@@ -2,7 +2,6 @@
 
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ordersApi } from "@/lib/api/orders";
-import { useCartStore } from "@/lib/stores/cartStore";
 import type { PlaceOrderRequest } from "@/lib/types/order";
 
 export const orderKeys = {
@@ -30,15 +29,11 @@ export function useOrder(id: string) {
 
 export function usePlaceOrder() {
   const queryClient = useQueryClient();
-  const clearCart = useCartStore((s) => s.clear);
 
   return useMutation({
     mutationFn: (body: PlaceOrderRequest) => ordersApi.placeOrder(body),
     onSuccess: () => {
-      // Invalidate order list so account/orders refreshes
       queryClient.invalidateQueries({ queryKey: orderKeys.lists() });
-      // Clear the cart
-      clearCart();
     },
   });
 }

@@ -37,6 +37,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)();
   const items = useCartStore((s) => s.items);
+  const clearCart = useCartStore((s) => s.clear);
   const [serverError, setServerError] = useState("");
 
   // Authenticated users start with saved-address mode; guests always use new
@@ -110,6 +111,7 @@ export default function CheckoutPage() {
 
       toast.success("Order placed successfully!");
       router.push(`/checkout/confirmation/${order.id}`);
+      clearCart();
     } catch (err: unknown) {
       setServerError(getApiError(err, "Failed to place order. Please try again."));
     }
