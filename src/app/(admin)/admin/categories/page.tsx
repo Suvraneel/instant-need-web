@@ -78,8 +78,8 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
   } = useForm<CategoryFormData>({
     resolver: zodResolver(categorySchema),
     values: editing
-      ? { name: editing.name, description: editing.description ?? "" }
-      : { name: "", description: "" },
+      ? { name: editing.name, slug: editing.slug ?? "", description: editing.description ?? "" }
+      : { name: "", slug: "", description: "" },
   });
 
   function handleClose() {
@@ -111,6 +111,7 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
           id: editing.id,
           body: {
             name: data.name,
+            slug: data.slug || undefined,
             description: data.description || undefined,
           },
         });
@@ -157,6 +158,23 @@ function CategoryDialog({ open, onClose, editing }: CategoryDialogProps) {
               <p className="text-xs text-destructive">{errors.name.message}</p>
             )}
           </div>
+
+          {isEdit && (
+            <div className="space-y-1">
+              <Label htmlFor="cat-slug">Slug</Label>
+              <Input
+                id="cat-slug"
+                placeholder="e.g. cleaning-essentials"
+                {...register("slug")}
+              />
+              <p className="text-xs text-muted-foreground">
+                Used in URLs. Use lowercase letters, numbers, and hyphens only.
+              </p>
+              {errors.slug && (
+                <p className="text-xs text-destructive">{errors.slug.message}</p>
+              )}
+            </div>
+          )}
 
           <div className="space-y-1">
             <Label htmlFor="cat-desc">Description</Label>
