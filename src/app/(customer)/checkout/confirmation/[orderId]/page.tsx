@@ -355,21 +355,8 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
                   {/* Row number in blue */}
                   <td style={{ padding: "10px", textAlign: "center", color: BLUE, fontWeight: "600" }}>{i + 1}</td>
                   <td style={{ padding: "10px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                      {/* Larger product image */}
-                      <div style={{ width: "52px", height: "52px", backgroundColor: "#eef2fb", border: "1px solid #d0d8ea", borderRadius: "5px", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        {item.imageUrl ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img src={item.imageUrl} alt={item.productName} style={{ width: "52px", height: "52px", objectFit: "cover" }} />
-                        ) : (
-                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8899bb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-                        )}
-                      </div>
-                      <div>
-                        <div style={{ fontWeight: "700", fontSize: "12px", marginBottom: "2px" }}>{item.productName}</div>
-                        <div style={{ color: BLUE, fontSize: "10px" }}>{item.sku}</div>
-                      </div>
-                    </div>
+                    <div style={{ fontWeight: "700", fontSize: "12px", marginBottom: "2px" }}>{item.productName}</div>
+                    <div style={{ color: BLUE, fontSize: "10px" }}>{item.sku}</div>
                   </td>
                   <td style={{ padding: "10px", textAlign: "center", fontSize: "12px" }}>{item.quantity}</td>
                   <td style={{ padding: "10px", textAlign: "right", fontSize: "12px" }}>
@@ -468,40 +455,43 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
           </tbody>
         </table>
 
-        {/* ── Feature icons ── */}
+        {/* ── Feature icons — horizontal layout (icon left, text right) ── */}
         <table style={{ width: "100%", border: "1px solid #d0d8ea", borderRadius: "7px", marginBottom: "12px", borderCollapse: "collapse", overflow: "hidden" }}>
           <tbody>
             <tr>
               {[
                 {
-                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+                  icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><polyline points="9 12 11 14 15 10"/></svg>,
                   label: "100%", sub: "Authentic Products",
                 },
                 {
-                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>,
+                  icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="16" y1="8" x2="8" y2="16"/><circle cx="8.5" cy="8.5" r="1.5"/><circle cx="15.5" cy="15.5" r="1.5"/></svg>,
                   label: "Best", sub: "Prices",
                 },
                 {
-                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
+                  icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/><line x1="5" y1="8" x2="1" y2="8"/></svg>,
                   label: "Fast & Safe", sub: "Delivery",
                 },
                 {
-                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>,
+                  icon: <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>,
                   label: "Dedicated", sub: "Support",
                 },
               ].map((f, i) => (
                 <td
                   key={f.sub}
                   style={{
-                    padding: "10px 8px",
-                    textAlign: "center",
+                    padding: "10px 12px",
                     borderRight: i < 3 ? "1px solid #d0d8ea" : "none",
                     width: "25%",
                   }}
                 >
-                  <div style={{ display: "flex", justifyContent: "center", marginBottom: "4px" }}>{f.icon}</div>
-                  <div style={{ fontWeight: "600", fontSize: "10.5px" }}>{f.label}</div>
-                  <div style={{ color: "#666", fontSize: "9.5px" }}>{f.sub}</div>
+                  <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                    <div style={{ flexShrink: 0 }}>{f.icon}</div>
+                    <div>
+                      <div style={{ fontWeight: "700", fontSize: "11px", color: "#222" }}>{f.label}</div>
+                      <div style={{ fontSize: "10px", color: "#555" }}>{f.sub}</div>
+                    </div>
+                  </div>
                 </td>
               ))}
             </tr>
