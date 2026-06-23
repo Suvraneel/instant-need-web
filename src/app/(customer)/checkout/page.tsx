@@ -5,8 +5,9 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, CreditCard, Truck, ShieldCheck } from "lucide-react";
+import { Loader2, CreditCard, Truck, ShieldCheck, AlertTriangle } from "lucide-react";
 import { toast } from "sonner";
+import { useQuery } from "@tanstack/react-query";
 
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -20,6 +21,8 @@ import { checkoutSchema, type CheckoutFormData } from "@/lib/validations/checkou
 import { useCartStore } from "@/lib/stores/cartStore";
 import { useAuthStore } from "@/lib/stores/authStore";
 import { usePlaceOrder } from "@/lib/hooks/useOrders";
+import { useCustomerAddresses } from "@/lib/hooks/useCustomer";
+import { pincodeApi } from "@/lib/api/catalog";
 import { buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getApiError } from "@/lib/errors";
@@ -37,6 +40,7 @@ export default function CheckoutPage() {
   const router = useRouter();
   const isAuthenticated = useAuthStore((s) => s.isAuthenticated)();
   const items = useCartStore((s) => s.items);
+  const subtotal = useCartStore((s) => s.subtotal)();
   const clearCart = useCartStore((s) => s.clear);
   const [serverError, setServerError] = useState("");
 
@@ -46,6 +50,7 @@ export default function CheckoutPage() {
   );
 
   const { mutateAsync: placeOrder, isPending } = usePlaceOrder();
+  const { data: savedAddresses } = useCustomerAddresses();
 
   const form = useForm<CheckoutFormData>({
     resolver: zodResolver(checkoutSchema),
@@ -55,6 +60,25 @@ export default function CheckoutPage() {
       country: "India",
     },
   });
+
+  // Derive the current pincode for min-order lookup
+  const savedAddressId = form.watch("savedAddressId");
+  const newPostalCode = form.watch("postalCode");
+
+  const activePincode =
+    addressMode === "saved"
+      ? (savedAddresses?.find((a) => a.id === savedAddressId)?.postalCode ?? "")
+      : (newPostalCode ?? "");
+
+  const { data: pincodeRule } = useQuery({
+    queryKey: ["pincode-min-order", activePincode],
+    queryFn: () => pincodeApi.getMinOrder(activePincode),
+    enabled: activePincode.length === 6,
+    retry: false,
+  });
+
+  const belowMinOrder =
+    pincodeRule != null && subtotal < pincodeRule.minAmount;
 
   // Redirect if cart is empty
   if (items.length === 0) {
@@ -208,6 +232,19 @@ export default function CheckoutPage() {
               />
             </section>
 
+            {/* ── Pincode minimum order warning ────────────────── */}
+            {belowMinOrder && pincodeRule && (
+              <div className="flex items-start gap-3 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-700 px-4 py-3 text-sm">
+                <AlertTriangle className="h-4 w-4 text-amber-500 mt-0.5 shrink-0" />
+                <p className="text-amber-800 dark:text-amber-300">
+                  Minimum order for pincode <strong>{activePincode}</strong> is{" "}
+                  <strong>₹{pincodeRule.minAmount.toLocaleString("en-IN")}</strong>. Your
+                  current subtotal is ₹{subtotal.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}.
+                  Please add more items to proceed.
+                </p>
+              </div>
+            )}
+
             {/* ── Trust badges ─────────────────────────────────── */}
             <div className="flex flex-wrap gap-4 text-xs text-muted-foreground pt-2">
               <div className="flex items-center gap-1.5">
@@ -237,7 +274,7 @@ export default function CheckoutPage() {
                 type="submit"
                 size="lg"
                 className="w-full"
-                disabled={isPending}
+                disabled={isPending || belowMinOrder}
               >
                 {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Place order

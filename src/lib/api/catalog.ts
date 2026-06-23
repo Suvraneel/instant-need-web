@@ -10,6 +10,8 @@ import type {
   PricingTierRequest,
   PriceCheckRequest,
   PriceCheckResponse,
+  PincodeMinOrderDTO,
+  PincodeMinOrderRequest,
 } from "@/lib/types/catalog";
 import type { PagedResponse } from "@/lib/types/common";
 
@@ -104,4 +106,24 @@ export const adminCatalogApi = {
       })
       .then((r) => r.data);
   },
+
+  listPincodeRules: () =>
+    apiClient.get<PincodeMinOrderDTO[]>("/admin/pincode-rules").then((r) => r.data),
+  createPincodeRule: (body: PincodeMinOrderRequest) =>
+    apiClient.post<PincodeMinOrderDTO>("/admin/pincode-rules", body).then((r) => r.data),
+  updatePincodeRule: (id: string, body: PincodeMinOrderRequest) =>
+    apiClient.put<PincodeMinOrderDTO>(`/admin/pincode-rules/${id}`, body).then((r) => r.data),
+  deletePincodeRule: (id: string) =>
+    apiClient.delete<void>(`/admin/pincode-rules/${id}`).then((r) => r.data),
+};
+
+export const pincodeApi = {
+  getMinOrder: (pincode: string) =>
+    apiClient
+      .get<PincodeMinOrderDTO>("/catalog/pincode-min-order", { params: { pincode } })
+      .then((r) => r.data)
+      .catch((err) => {
+        if (err?.response?.status === 204) return null;
+        throw err;
+      }),
 };

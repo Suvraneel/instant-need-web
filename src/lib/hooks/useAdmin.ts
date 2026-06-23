@@ -10,6 +10,7 @@ import type {
   UpdateProductRequest,
   CategoryDTO,
   PricingTierRequest,
+  PincodeMinOrderRequest,
 } from "@/lib/types/catalog";
 import type { AdminOrderFilterParams } from "@/lib/types/admin";
 import type { UpdateOrderStatusRequest } from "@/lib/types/order";
@@ -211,5 +212,44 @@ export function useReplacePricingTiers(productId: string) {
       qc.invalidateQueries({ queryKey: pricingTierKeys.detail(productId) });
       qc.invalidateQueries({ queryKey: adminProductKeys.all });
     },
+  });
+}
+
+// ── Pincode minimum order rules ───────────────────────────────────────────
+
+export const pincodeRuleKeys = {
+  all: ["admin", "pincode-rules"] as const,
+  list: () => [...pincodeRuleKeys.all, "list"] as const,
+};
+
+export function useAdminPincodeRules() {
+  return useQuery({
+    queryKey: pincodeRuleKeys.list(),
+    queryFn: () => adminCatalogApi.listPincodeRules(),
+  });
+}
+
+export function useCreatePincodeRule() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (body: PincodeMinOrderRequest) => adminCatalogApi.createPincodeRule(body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: pincodeRuleKeys.all }),
+  });
+}
+
+export function useUpdatePincodeRule() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: ({ id, body }: { id: string; body: PincodeMinOrderRequest }) =>
+      adminCatalogApi.updatePincodeRule(id, body),
+    onSuccess: () => qc.invalidateQueries({ queryKey: pincodeRuleKeys.all }),
+  });
+}
+
+export function useDeletePincodeRule() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string) => adminCatalogApi.deletePincodeRule(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: pincodeRuleKeys.all }),
   });
 }

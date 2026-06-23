@@ -14,6 +14,7 @@ import {
   Package2,
   ChevronLeft,
   ChevronRight,
+  MapPin,
 } from "lucide-react";
 import { InstantNeedIcon, InstantNeedWordmark } from "@/components/ui/brand";
 import { cn } from "@/lib/utils";
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { label: "Products", href: "/admin/products", icon: Package },
   { label: "Categories", href: "/admin/categories", icon: Tag },
   { label: "Pricing", href: "/admin/pricing", icon: CircleDollarSign },
+  { label: "Pincode Rules", href: "/admin/pincode-rules", icon: MapPin },
   { label: "Orders", href: "/admin/orders", icon: ShoppingBag },
   { label: "Customers", href: "/admin/customers", icon: Users },
   { label: "Reports", href: "/admin/reports", icon: BarChart3 },

@@ -107,3 +107,18 @@ export interface PriceCheckResponse {
   currencyCode: string;
   tierApplied?: PricingTierDTO;
 }
+
+export interface PincodeMinOrderDTO {
+  id: string;
+  pincode: string;
+  minAmount: number;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface PincodeMinOrderRequest {
+  pincode: string;
+  minAmount: number;
+  active?: boolean;
+}
