@@ -75,7 +75,7 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
         <Link href="/products" className="hover:text-foreground transition-colors">Products</Link>
         <ChevronRight className="h-3.5 w-3.5" />
         <Link
-          href={`/categories/${product.categoryId}`}
+          href={`/categories/${product.categorySlug ?? product.categoryId}`}
           className="hover:text-foreground transition-colors"
         >
           {product.categoryName}

@@ -31,6 +31,7 @@ export interface ProductDTO {
   description?: string;
   categoryId: string;
   categoryName: string;
+  categorySlug?: string;
   mrp?: number;
   basePrice: number;
   currencyCode: string;

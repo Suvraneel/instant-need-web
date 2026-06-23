@@ -332,63 +332,67 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
 
         {/* ── Order Summary ── */}
         <div style={{ marginBottom: "12px" }}>
-          <div style={{ backgroundColor: NAVY, color: "white", padding: "7px 12px", display: "flex", alignItems: "center", gap: "7px" }}>
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-            <span style={{ fontWeight: "bold", fontSize: "12px", letterSpacing: "0.5px" }}>ORDER SUMMARY</span>
+          {/* Header bar with chevron arrow on right */}
+          <div style={{ backgroundColor: NAVY, color: "white", padding: "8px 14px", display: "flex", alignItems: "center", gap: "8px", position: "relative", clipPath: "polygon(0 0, calc(100% - 18px) 0, 100% 50%, calc(100% - 18px) 100%, 0 100%)" }}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span style={{ fontWeight: "bold", fontSize: "13px", letterSpacing: "0.5px" }}>ORDER SUMMARY</span>
           </div>
 
           <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #d0d8ea", borderTop: "none" }}>
             <thead>
-              <tr style={{ backgroundColor: NAVY, color: "white" }}>
-                <th style={{ padding: "7px 10px", width: "32px", textAlign: "center", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>#</th>
-                <th style={{ padding: "7px 10px", textAlign: "left", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>ITEM NAME</th>
-                <th style={{ padding: "7px 10px", textAlign: "center", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>QUANTITY</th>
-                <th style={{ padding: "7px 10px", textAlign: "right", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>RATE (₹)</th>
-                <th style={{ padding: "7px 10px", textAlign: "right", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>AMOUNT (₹)</th>
+              {/* Column headers — brighter blue, matching img2 */}
+              <tr style={{ backgroundColor: BLUE, color: "white" }}>
+                <th style={{ padding: "8px 10px", width: "36px", textAlign: "center", fontSize: "10.5px", fontWeight: "bold", letterSpacing: "0.4px" }}>#</th>
+                <th style={{ padding: "8px 10px", textAlign: "left", fontSize: "10.5px", fontWeight: "bold", letterSpacing: "0.4px" }}>ITEM NAME</th>
+                <th style={{ padding: "8px 10px", textAlign: "center", fontSize: "10.5px", fontWeight: "bold", letterSpacing: "0.4px" }}>QUANTITY</th>
+                <th style={{ padding: "8px 10px", textAlign: "right", fontSize: "10.5px", fontWeight: "bold", letterSpacing: "0.4px" }}>RATE (₹)</th>
+                <th style={{ padding: "8px 10px", textAlign: "right", fontSize: "10.5px", fontWeight: "bold", letterSpacing: "0.4px" }}>AMOUNT (₹)</th>
               </tr>
             </thead>
             <tbody>
               {order.items?.map((item, i) => (
                 <tr key={item.id} style={{ borderBottom: "1px solid #e4eaf5" }}>
-                  <td style={{ padding: "8px 10px", textAlign: "center", color: "#666" }}>{i + 1}</td>
-                  <td style={{ padding: "8px 10px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                      <div style={{ width: "36px", height: "36px", backgroundColor: "#eef2fb", border: "1px solid #d0d8ea", borderRadius: "4px", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  {/* Row number in blue */}
+                  <td style={{ padding: "10px", textAlign: "center", color: BLUE, fontWeight: "600" }}>{i + 1}</td>
+                  <td style={{ padding: "10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+                      {/* Larger product image */}
+                      <div style={{ width: "52px", height: "52px", backgroundColor: "#eef2fb", border: "1px solid #d0d8ea", borderRadius: "5px", overflow: "hidden", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                         {item.imageUrl ? (
                           // eslint-disable-next-line @next/next/no-img-element
-                          <img src={item.imageUrl} alt={item.productName} style={{ width: "36px", height: "36px", objectFit: "cover" }} />
+                          <img src={item.imageUrl} alt={item.productName} style={{ width: "52px", height: "52px", objectFit: "cover" }} />
                         ) : (
-                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8899bb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+                          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8899bb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                         )}
                       </div>
                       <div>
-                        <div style={{ fontWeight: "600", marginBottom: "1px" }}>{item.productName}</div>
-                        <div style={{ color: "#888", fontSize: "9.5px" }}>{item.sku}</div>
+                        <div style={{ fontWeight: "700", fontSize: "12px", marginBottom: "2px" }}>{item.productName}</div>
+                        <div style={{ color: BLUE, fontSize: "10px" }}>{item.sku}</div>
                       </div>
                     </div>
                   </td>
-                  <td style={{ padding: "8px 10px", textAlign: "center" }}>{item.quantity}</td>
-                  <td style={{ padding: "8px 10px", textAlign: "right" }}>
+                  <td style={{ padding: "10px", textAlign: "center", fontSize: "12px" }}>{item.quantity}</td>
+                  <td style={{ padding: "10px", textAlign: "right", fontSize: "12px" }}>
                     {item.unitPrice.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
-                  <td style={{ padding: "8px 10px", textAlign: "right" }}>
+                  <td style={{ padding: "10px", textAlign: "right", fontSize: "12px" }}>
                     {item.lineTotal.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
-              <tr style={{ borderTop: "1px solid #d0d8ea" }}>
-                <td colSpan={3} style={{ padding: "6px 10px" }}></td>
-                <td style={{ padding: "6px 10px", color: BLUE, fontWeight: "600" }}>Subtotal</td>
-                <td style={{ padding: "6px 10px", textAlign: "right", fontWeight: "700" }}>
+              <tr style={{ borderTop: "2px solid #d0d8ea" }}>
+                <td colSpan={2}></td>
+                <td colSpan={2} style={{ padding: "7px 10px", color: BLUE, fontWeight: "700", textAlign: "right" }}>Subtotal</td>
+                <td style={{ padding: "7px 10px", textAlign: "right", fontWeight: "700" }}>
                   ₹{order.subtotalAmount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
               </tr>
               {order.shippingAmount > 0 && (
                 <tr>
-                  <td colSpan={3}></td>
-                  <td style={{ padding: "3px 10px", color: "#555" }}>Shipping</td>
+                  <td colSpan={2}></td>
+                  <td colSpan={2} style={{ padding: "3px 10px", color: "#555", textAlign: "right" }}>Shipping</td>
                   <td style={{ padding: "3px 10px", textAlign: "right" }}>
                     ₹{order.shippingAmount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
@@ -396,8 +400,8 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
               )}
               {order.discountAmount > 0 && (
                 <tr>
-                  <td colSpan={3}></td>
-                  <td style={{ padding: "3px 10px", color: "#16a34a" }}>Discount</td>
+                  <td colSpan={2}></td>
+                  <td colSpan={2} style={{ padding: "3px 10px", color: "#16a34a", textAlign: "right" }}>Discount</td>
                   <td style={{ padding: "3px 10px", textAlign: "right", color: "#16a34a" }}>
                     −₹{order.discountAmount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
@@ -405,17 +409,17 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
               )}
               {Math.abs(roundOff) >= 0.01 && (
                 <tr>
-                  <td colSpan={3}></td>
-                  <td style={{ padding: "3px 10px", color: "#555" }}>Round Off</td>
+                  <td colSpan={2}></td>
+                  <td colSpan={2} style={{ padding: "3px 10px", color: "#555", textAlign: "right" }}>Round Off</td>
                   <td style={{ padding: "3px 10px", textAlign: "right" }}>
                     ₹{roundOff.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                 </tr>
               )}
               <tr style={{ backgroundColor: NAVY, color: "white" }}>
-                <td colSpan={3} style={{ padding: "9px 10px" }}></td>
-                <td style={{ padding: "9px 10px", fontWeight: "bold", fontSize: "12px", letterSpacing: "0.4px" }}>TOTAL AMOUNT</td>
-                <td style={{ padding: "9px 10px", textAlign: "right", fontWeight: "bold", fontSize: "16px" }}>
+                <td colSpan={3} style={{ padding: "10px" }}></td>
+                <td style={{ padding: "10px", fontWeight: "bold", fontSize: "12px", letterSpacing: "0.4px", textAlign: "right" }}>TOTAL AMOUNT</td>
+                <td style={{ padding: "10px", textAlign: "right", fontWeight: "bold", fontSize: "16px" }}>
                   ₹{displayTotal.toLocaleString("en-IN")}
                 </td>
               </tr>
