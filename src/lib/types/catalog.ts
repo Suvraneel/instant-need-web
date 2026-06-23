@@ -12,6 +12,7 @@ export interface PricingTierDTO {
   minQty: number;
   maxQty?: number;
   unitPrice: number;
+  discountPercent?: number;
   currencyCode: string;
 }
 
@@ -73,6 +74,7 @@ export interface PricingTierRequest {
   minQty: number;
   maxQty?: number;
   unitPrice: number;
+  discountPercent?: number;
   currencyCode: string;
 }
 

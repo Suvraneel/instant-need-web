@@ -107,6 +107,7 @@ export function ProductForm({ product }: ProductFormProps) {
           minQty: t.minQty,
           maxQty: t.maxQty,
           unitPrice: t.unitPrice,
+          discountPercent: t.discountPercent,
           currencyCode: t.currencyCode,
         })),
       });
@@ -119,6 +120,7 @@ export function ProductForm({ product }: ProductFormProps) {
       minQty: t.minQty,
       maxQty: t.maxQty === "" || t.maxQty === undefined ? undefined : t.maxQty,
       unitPrice: t.unitPrice,
+      discountPercent: t.discountPercent === "" || t.discountPercent === undefined ? undefined : t.discountPercent,
       currencyCode: t.currencyCode,
     }));
 

@@ -39,10 +39,17 @@ export function PricingTiersTable({ tiers, currencyCode, basePrice, mrp }: Prici
             key={tier.id ?? i}
             className="flex items-center justify-between px-4 py-2.5"
           >
-            <span className="text-sm text-muted-foreground">
-              {tier.minQty}
-              {tier.maxQty ? `–${tier.maxQty}` : "+"} items
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-muted-foreground">
+                {tier.minQty}
+                {tier.maxQty ? `–${tier.maxQty}` : "+"} items
+              </span>
+              {tier.discountPercent && tier.discountPercent > 0 && (
+                <span className="text-xs font-semibold text-green-700 bg-green-100 rounded px-1.5 py-0.5">
+                  {tier.discountPercent}% off
+                </span>
+              )}
+            </div>
             <div className="text-right">
               {mrp && mrp > tier.unitPrice && (
                 <p className="text-xs text-muted-foreground line-through">

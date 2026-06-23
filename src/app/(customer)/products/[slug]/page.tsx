@@ -204,7 +204,6 @@ export default function ProductDetailPage({ params }: ProductPageProps) {
 
           {/* Meta */}
           <div className="text-xs text-muted-foreground space-y-1 pt-2">
-            <p>Stock available: <span className="font-medium text-foreground">{product.stock} items</span></p>
             <p>Minimum order: <span className="font-medium text-foreground">{product.moq} items</span></p>
           </div>
         </div>

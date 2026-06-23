@@ -12,6 +12,7 @@ export const pricingTierSchema = z.object({
   minQty: z.coerce.number().int().min(1, "Min qty must be ≥ 1"),
   maxQty: z.coerce.number().int().min(1).optional().or(z.literal("")),
   unitPrice: z.coerce.number().positive("Price must be positive"),
+  discountPercent: z.coerce.number().min(0).max(100).optional().or(z.literal("")),
   currencyCode: z.string().default("INR"),
 });
 

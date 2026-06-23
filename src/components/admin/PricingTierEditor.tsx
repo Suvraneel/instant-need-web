@@ -26,7 +26,7 @@ export function PricingTierEditor() {
           variant="outline"
           size="sm"
           onClick={() =>
-            append({ minQty: 1, maxQty: undefined, unitPrice: 0, currencyCode: "INR" })
+            append({ minQty: 1, maxQty: undefined, unitPrice: 0, discountPercent: undefined, currencyCode: "INR" })
           }
         >
           <Plus className="h-3.5 w-3.5 mr-1" />
@@ -41,15 +41,16 @@ export function PricingTierEditor() {
       ) : (
         <div className="space-y-2">
           {/* Header row */}
-          <div className="grid grid-cols-[1fr_1fr_1fr_32px] gap-2 px-1">
+          <div className="grid grid-cols-[1fr_1fr_1fr_1fr_32px] gap-2 px-1">
             <span className="text-xs font-medium text-muted-foreground">Min Qty</span>
             <span className="text-xs font-medium text-muted-foreground">Max Qty</span>
             <span className="text-xs font-medium text-muted-foreground">Unit Price (₹)</span>
+            <span className="text-xs font-medium text-muted-foreground">Discount %</span>
             <span />
           </div>
 
           {fields.map((field, index) => (
-            <div key={field.id} className="grid grid-cols-[1fr_1fr_1fr_32px] gap-2 items-start">
+            <div key={field.id} className="grid grid-cols-[1fr_1fr_1fr_1fr_32px] gap-2 items-start">
               <div>
                 <Input
                   type="number"
@@ -87,6 +88,17 @@ export function PricingTierEditor() {
                     {errors.pricingTiers[index]?.unitPrice?.message}
                   </p>
                 )}
+              </div>
+              <div>
+                <Input
+                  type="number"
+                  min={0}
+                  max={100}
+                  step={0.1}
+                  placeholder="e.g. 10"
+                  {...register(`pricingTiers.${index}.discountPercent`)}
+                  className="h-8 text-sm"
+                />
               </div>
               <Button
                 type="button"
