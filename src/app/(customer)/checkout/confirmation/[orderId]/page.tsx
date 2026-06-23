@@ -20,6 +20,7 @@ import { formatCurrency, formatDateTime } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 const NAVY = "#0d2b5e";
+const BLUE = "#1a56db";
 
 const COMPANY = {
   name: "InstantNeed Private Limited",
@@ -55,11 +56,11 @@ function amountToWords(amount: number): string {
     "Ten", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen",
     "Seventeen", "Eighteen", "Nineteen",
   ];
-  const tens = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
+  const tensArr = ["", "", "Twenty", "Thirty", "Forty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"];
   function words(n: number): string {
     if (n === 0) return "";
     if (n < 20) return ones[n] + " ";
-    if (n < 100) return tens[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "") + " ";
+    if (n < 100) return tensArr[Math.floor(n / 10)] + (n % 10 ? " " + ones[n % 10] : "") + " ";
     if (n < 1000) return ones[Math.floor(n / 100)] + " Hundred " + words(n % 100);
     if (n < 100000) return words(Math.floor(n / 1000)) + "Thousand " + words(n % 1000);
     if (n < 10000000) return words(Math.floor(n / 100000)) + "Lakh " + words(n % 100000);
@@ -108,6 +109,14 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
 
   return (
     <>
+      {/* Print-page CSS */}
+      <style>{`
+        @media print {
+          @page { margin: 8mm 12mm; size: A4 portrait; }
+          body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        }
+      `}</style>
+
       {/* ── Screen layout ─────────────────────────────────────────────────── */}
       <div className="max-w-2xl mx-auto px-4 py-12 space-y-8 print:hidden">
         <div className="text-center space-y-3">
@@ -231,146 +240,154 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
         </div>
       </div>
 
-      {/* ── Print / PDF invoice layout ─────────────────────────────────────── */}
+      {/* ── Print / PDF invoice ────────────────────────────────────────────── */}
       <div
         className="hidden print:block"
         style={{
-          fontFamily: "Arial, sans-serif",
-          fontSize: "12px",
-          color: "#333",
-          padding: "24px 28px",
-          maxWidth: "800px",
-          margin: "0 auto",
-          printColorAdjust: "exact",
-          WebkitPrintColorAdjust: "exact",
-        } as React.CSSProperties}
+          fontFamily: "'Arial', sans-serif",
+          fontSize: "11px",
+          color: "#222",
+          lineHeight: "1.4",
+        }}
       >
-        {/* ── Header ── */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: "14px", borderBottom: "2px solid #dde3ef", marginBottom: "16px" }}>
-          {/* Logo */}
-          <div>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "2px" }}>
-              {/* Cart icon SVG */}
-              <svg width="44" height="40" viewBox="0 0 44 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect width="44" height="40" rx="4" fill={NAVY} />
-                <path d="M8 10h3l3 14h14l3-10H14" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
-                <circle cx="18" cy="27" r="2" fill="white"/>
-                <circle cx="28" cy="27" r="2" fill="white"/>
-                <circle cx="30" cy="13" r="5" fill="#2a7de1" stroke="white" strokeWidth="1.5"/>
-                <path d="M27.5 13l1.5 1.5 3-3" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              <div>
-                <span style={{ fontSize: "22px", fontWeight: "bold", color: "#2a7de1" }}>Instant</span>
-                <span style={{ fontSize: "22px", fontWeight: "bold", color: NAVY }}>Need</span>
-              </div>
-            </div>
-            <p style={{ color: "#666", fontSize: "11px", marginLeft: "50px" }}>Your Business, Our Priority.</p>
-            <div style={{ borderBottom: "1px solid #dde3ef", marginTop: "6px", marginLeft: "50px", width: "160px" }} />
-          </div>
-          {/* Order info */}
-          <div style={{ textAlign: "right" }}>
-            <h2 style={{ color: "#2a7de1", fontSize: "20px", fontWeight: "bold", marginBottom: "8px", letterSpacing: "0.5px" }}>
-              ORDER CONFIRMATION
-            </h2>
-            <p style={{ marginBottom: "3px" }}>
-              <strong>Order ID:</strong> #{orderDisplay}
-            </p>
-            <p>
-              <strong>Date:</strong> {formatInvoiceDate(order.placedAt)}
-            </p>
-          </div>
-        </div>
+        {/* ── Top header: logo + order confirmation ── */}
+        <table style={{ width: "100%", marginBottom: "10px", borderBottom: `2px solid #d0d8ea`, paddingBottom: "10px" }}>
+          <tbody>
+            <tr>
+              <td style={{ verticalAlign: "top" }}>
+                {/* Logo */}
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <svg width="46" height="46" viewBox="0 0 46 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="46" height="46" rx="6" fill={NAVY}/>
+                    <path d="M9 11h4l4 16h16l4-12H16" stroke="white" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" fill="none"/>
+                    <circle cx="20" cy="31" r="2.2" fill="white"/>
+                    <circle cx="30" cy="31" r="2.2" fill="white"/>
+                    <circle cx="32" cy="15" r="6" fill={BLUE} stroke="white" strokeWidth="1.5"/>
+                    <path d="M29.5 15l2 2 3.5-3.5" stroke="white" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                  <div>
+                    <div style={{ fontSize: "22px", fontWeight: "bold", lineHeight: 1 }}>
+                      <span style={{ color: BLUE }}>Instant</span>
+                      <span style={{ color: NAVY }}>Need</span>
+                    </div>
+                    <div style={{ color: "#666", fontSize: "10px", marginTop: "2px" }}>Your Business, Our Priority.</div>
+                    <div style={{ borderBottom: "1px solid #ccd4e8", marginTop: "5px", width: "170px" }} />
+                  </div>
+                </div>
+              </td>
+              <td style={{ textAlign: "right", verticalAlign: "top" }}>
+                <div style={{ color: BLUE, fontSize: "19px", fontWeight: "bold", marginBottom: "6px", letterSpacing: "0.3px" }}>
+                  ORDER CONFIRMATION
+                </div>
+                <div style={{ marginBottom: "3px" }}><strong>Order ID:</strong> #{orderDisplay}</div>
+                <div><strong>Date:</strong> {formatInvoiceDate(order.placedAt)}</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
-        {/* ── Company info + Order Placed box ── */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "20px" }}>
-          <div style={{ fontSize: "12px", lineHeight: "1.7" }}>
-            <p style={{ color: "#2a7de1", fontWeight: "bold", fontSize: "13px", marginBottom: "3px" }}>
-              {COMPANY.name}
-            </p>
-            <p>{COMPANY.line1}</p>
-            <p style={{ marginBottom: "4px" }}>{COMPANY.line2}</p>
-            <p>
-              <span style={{ color: "#2a7de1", marginRight: "4px" }}>📞</span>
-              <strong>Phone:</strong> {COMPANY.phone}
-            </p>
-            <p>
-              <span style={{ color: "#2a7de1", marginRight: "4px" }}>✉</span>
-              <strong>Email:</strong> {COMPANY.email}
-            </p>
-            <p>
-              <span style={{ color: "#2a7de1", marginRight: "4px" }}>🌐</span>
-              <strong>Website:</strong> {COMPANY.website}
-            </p>
-          </div>
-          {/* Order Placed box */}
-          <div style={{ border: "1px solid #dde3ef", borderRadius: "10px", padding: "14px 20px", display: "flex", alignItems: "center", gap: "14px", minWidth: "240px" }}>
-            <div style={{ width: "46px", height: "46px", borderRadius: "50%", backgroundColor: "#2a7de1", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-              <span style={{ color: "white", fontSize: "22px", lineHeight: 1 }}>✓</span>
-            </div>
-            <div>
-              <p style={{ color: "#2a7de1", fontWeight: "bold", fontSize: "15px", marginBottom: "3px" }}>Order Placed!</p>
-              <p style={{ color: "#666", fontSize: "11px", marginBottom: "1px" }}>Thank you for your order.</p>
-              <p style={{ color: "#666", fontSize: "11px" }}>We&apos;ll notify you when it ships.</p>
-            </div>
-          </div>
-        </div>
+        {/* ── Company info + Order Placed ── */}
+        <table style={{ width: "100%", marginBottom: "12px" }}>
+          <tbody>
+            <tr>
+              <td style={{ verticalAlign: "top", width: "55%" }}>
+                <div style={{ color: BLUE, fontWeight: "bold", fontSize: "12px", marginBottom: "4px" }}>{COMPANY.name}</div>
+                <div>{COMPANY.line1}</div>
+                <div style={{ marginBottom: "5px" }}>{COMPANY.line2}</div>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td style={{ paddingRight: "6px", color: BLUE }}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 14 19.79 19.79 0 0 1 1.92 5.45 2 2 0 0 1 3.89 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
+                      </td>
+                      <td><strong>Phone:</strong> {COMPANY.phone}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ paddingRight: "6px", color: BLUE }}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                      </td>
+                      <td><strong>Email:</strong> {COMPANY.email}</td>
+                    </tr>
+                    <tr>
+                      <td style={{ paddingRight: "6px", color: BLUE }}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                      </td>
+                      <td><strong>Website:</strong> {COMPANY.website}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+              <td style={{ verticalAlign: "top", width: "45%", paddingLeft: "16px" }}>
+                <div style={{ border: "1px solid #d0d8ea", borderRadius: "8px", padding: "12px 16px", display: "flex", alignItems: "center", gap: "12px" }}>
+                  <div style={{ width: "42px", height: "42px", borderRadius: "50%", backgroundColor: BLUE, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                  </div>
+                  <div>
+                    <div style={{ color: BLUE, fontWeight: "bold", fontSize: "14px", marginBottom: "3px" }}>Order Placed!</div>
+                    <div style={{ color: "#555", fontSize: "10.5px" }}>Thank you for your order.</div>
+                    <div style={{ color: "#555", fontSize: "10.5px" }}>We&apos;ll notify you when it ships.</div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         {/* ── Order Summary ── */}
-        <div style={{ marginBottom: "16px" }}>
-          {/* Section header */}
-          <div style={{ backgroundColor: NAVY, color: "white", padding: "8px 14px", display: "flex", alignItems: "center", gap: "8px", borderRadius: "4px 4px 0 0" }}>
-            <span style={{ fontSize: "14px" }}>📋</span>
-            <span style={{ fontWeight: "bold", fontSize: "13px", letterSpacing: "0.5px" }}>ORDER SUMMARY</span>
+        <div style={{ marginBottom: "12px" }}>
+          <div style={{ backgroundColor: NAVY, color: "white", padding: "7px 12px", display: "flex", alignItems: "center", gap: "7px" }}>
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+            <span style={{ fontWeight: "bold", fontSize: "12px", letterSpacing: "0.5px" }}>ORDER SUMMARY</span>
           </div>
-          {/* Table */}
-          <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #dde3ef", borderTop: "none" }}>
+
+          <table style={{ width: "100%", borderCollapse: "collapse", border: "1px solid #d0d8ea", borderTop: "none" }}>
             <thead>
               <tr style={{ backgroundColor: NAVY, color: "white" }}>
-                <th style={{ padding: "9px 12px", textAlign: "center", width: "36px", fontWeight: "bold", fontSize: "11px", letterSpacing: "0.5px" }}>#</th>
-                <th style={{ padding: "9px 12px", textAlign: "left", fontWeight: "bold", fontSize: "11px", letterSpacing: "0.5px" }}>ITEM NAME</th>
-                <th style={{ padding: "9px 12px", textAlign: "center", fontWeight: "bold", fontSize: "11px", letterSpacing: "0.5px" }}>QUANTITY</th>
-                <th style={{ padding: "9px 12px", textAlign: "right", fontWeight: "bold", fontSize: "11px", letterSpacing: "0.5px" }}>RATE (₹)</th>
-                <th style={{ padding: "9px 12px", textAlign: "right", fontWeight: "bold", fontSize: "11px", letterSpacing: "0.5px" }}>AMOUNT (₹)</th>
+                <th style={{ padding: "7px 10px", width: "32px", textAlign: "center", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>#</th>
+                <th style={{ padding: "7px 10px", textAlign: "left", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>ITEM NAME</th>
+                <th style={{ padding: "7px 10px", textAlign: "center", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>QUANTITY</th>
+                <th style={{ padding: "7px 10px", textAlign: "right", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>RATE (₹)</th>
+                <th style={{ padding: "7px 10px", textAlign: "right", fontSize: "10px", fontWeight: "bold", letterSpacing: "0.4px" }}>AMOUNT (₹)</th>
               </tr>
             </thead>
             <tbody>
               {order.items?.map((item, i) => (
-                <tr key={item.id} style={{ borderBottom: "1px solid #e8edf5", backgroundColor: i % 2 === 0 ? "#fff" : "#f9fafc" }}>
-                  <td style={{ padding: "10px 12px", textAlign: "center", color: "#666" }}>{i + 1}</td>
-                  <td style={{ padding: "10px 12px" }}>
-                    <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                      <div style={{ width: "36px", height: "36px", backgroundColor: "#f0f4ff", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, border: "1px solid #dde3ef" }}>
-                        <span style={{ fontSize: "16px" }}>📦</span>
+                <tr key={item.id} style={{ borderBottom: "1px solid #e4eaf5" }}>
+                  <td style={{ padding: "8px 10px", textAlign: "center", color: "#666" }}>{i + 1}</td>
+                  <td style={{ padding: "8px 10px" }}>
+                    <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                      <div style={{ width: "32px", height: "32px", backgroundColor: "#eef2fb", border: "1px solid #d0d8ea", borderRadius: "4px", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8899bb" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
                       </div>
                       <div>
-                        <p style={{ fontWeight: "600", marginBottom: "2px" }}>{item.productName}</p>
-                        <p style={{ color: "#888", fontSize: "10px" }}>{item.sku}</p>
+                        <div style={{ fontWeight: "600", marginBottom: "1px" }}>{item.productName}</div>
+                        <div style={{ color: "#888", fontSize: "9.5px" }}>{item.sku}</div>
                       </div>
                     </div>
                   </td>
-                  <td style={{ padding: "10px 12px", textAlign: "center" }}>{item.quantity}</td>
-                  <td style={{ padding: "10px 12px", textAlign: "right" }}>
+                  <td style={{ padding: "8px 10px", textAlign: "center" }}>{item.quantity}</td>
+                  <td style={{ padding: "8px 10px", textAlign: "right" }}>
                     {item.unitPrice.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
-                  <td style={{ padding: "10px 12px", textAlign: "right" }}>
+                  <td style={{ padding: "8px 10px", textAlign: "right" }}>
                     {item.lineTotal.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                 </tr>
               ))}
             </tbody>
             <tfoot>
-              <tr style={{ borderTop: "2px solid #dde3ef" }}>
-                <td colSpan={3}></td>
-                <td style={{ padding: "8px 12px", color: "#2a7de1", fontWeight: "600" }}>Subtotal</td>
-                <td style={{ padding: "8px 12px", textAlign: "right", fontWeight: "700" }}>
+              <tr style={{ borderTop: "1px solid #d0d8ea" }}>
+                <td colSpan={3} style={{ padding: "6px 10px" }}></td>
+                <td style={{ padding: "6px 10px", color: BLUE, fontWeight: "600" }}>Subtotal</td>
+                <td style={{ padding: "6px 10px", textAlign: "right", fontWeight: "700" }}>
                   ₹{order.subtotalAmount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                 </td>
               </tr>
               {order.shippingAmount > 0 && (
                 <tr>
                   <td colSpan={3}></td>
-                  <td style={{ padding: "4px 12px", color: "#666" }}>Shipping</td>
-                  <td style={{ padding: "4px 12px", textAlign: "right" }}>
+                  <td style={{ padding: "3px 10px", color: "#555" }}>Shipping</td>
+                  <td style={{ padding: "3px 10px", textAlign: "right" }}>
                     ₹{order.shippingAmount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                 </tr>
@@ -378,8 +395,8 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
               {order.discountAmount > 0 && (
                 <tr>
                   <td colSpan={3}></td>
-                  <td style={{ padding: "4px 12px", color: "#16a34a" }}>Discount</td>
-                  <td style={{ padding: "4px 12px", textAlign: "right", color: "#16a34a" }}>
+                  <td style={{ padding: "3px 10px", color: "#16a34a" }}>Discount</td>
+                  <td style={{ padding: "3px 10px", textAlign: "right", color: "#16a34a" }}>
                     −₹{order.discountAmount.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                 </tr>
@@ -387,16 +404,16 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
               {Math.abs(roundOff) >= 0.01 && (
                 <tr>
                   <td colSpan={3}></td>
-                  <td style={{ padding: "4px 12px", color: "#666" }}>Round Off</td>
-                  <td style={{ padding: "4px 12px", textAlign: "right" }}>
+                  <td style={{ padding: "3px 10px", color: "#555" }}>Round Off</td>
+                  <td style={{ padding: "3px 10px", textAlign: "right" }}>
                     ₹{roundOff.toLocaleString("en-IN", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                   </td>
                 </tr>
               )}
               <tr style={{ backgroundColor: NAVY, color: "white" }}>
-                <td colSpan={3}></td>
-                <td style={{ padding: "11px 12px", fontWeight: "bold", fontSize: "13px", letterSpacing: "0.5px" }}>TOTAL AMOUNT</td>
-                <td style={{ padding: "11px 12px", textAlign: "right", fontWeight: "bold", fontSize: "17px" }}>
+                <td colSpan={3} style={{ padding: "9px 10px" }}></td>
+                <td style={{ padding: "9px 10px", fontWeight: "bold", fontSize: "12px", letterSpacing: "0.4px" }}>TOTAL AMOUNT</td>
+                <td style={{ padding: "9px 10px", textAlign: "right", fontWeight: "bold", fontSize: "16px" }}>
                   ₹{displayTotal.toLocaleString("en-IN")}
                 </td>
               </tr>
@@ -405,87 +422,126 @@ export default function OrderConfirmationPage({ params }: ConfirmationPageProps)
         </div>
 
         {/* ── Amount in Words ── */}
-        <p style={{ marginBottom: "18px", fontSize: "11.5px" }}>
+        <p style={{ marginBottom: "12px", fontSize: "11px" }}>
           <strong style={{ color: NAVY }}>Amount in Words:</strong>{" "}
           {amountToWords(displayTotal)}
         </p>
 
         {/* ── Shipping + Payment ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "14px", marginBottom: "18px" }}>
-          {/* Shipping */}
-          <div style={{ border: "1px solid #dde3ef", borderRadius: "8px", padding: "12px 14px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#2a7de1", fontWeight: "bold", fontSize: "12px", marginBottom: "8px", paddingBottom: "8px", borderBottom: "1px dashed #dde3ef" }}>
-              <span>📍</span> SHIPPING ADDRESS
-            </div>
-            {addr ? (
-              <div style={{ lineHeight: "1.65", fontSize: "11.5px" }}>
-                <p style={{ fontWeight: "600" }}>{addr.fullName}</p>
-                <p>{addr.addressLine1}</p>
-                {addr.addressLine2 && <p>{addr.addressLine2}</p>}
-                <p>{addr.city}, {addr.state} {addr.postalCode}</p>
-                {addr.phoneNumber && <p>{addr.phoneNumber}</p>}
-              </div>
-            ) : (
-              <p style={{ color: "#888", fontSize: "11px" }}>Address not available</p>
-            )}
-          </div>
-          {/* Payment */}
-          <div style={{ border: "1px solid #dde3ef", borderRadius: "8px", padding: "12px 14px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px", color: "#2a7de1", fontWeight: "bold", fontSize: "12px", marginBottom: "8px", paddingBottom: "8px", borderBottom: "1px dashed #dde3ef" }}>
-              <span>💳</span> PAYMENT METHOD
-            </div>
-            <p style={{ fontWeight: "600", marginBottom: "3px" }}>
-              {order.paymentMethod === "cod" ? "Cash On Delivery" : order.paymentMethod}
-            </p>
-            <p style={{ color: "#666", fontSize: "11px" }}>Payment due on delivery</p>
-          </div>
-        </div>
+        <table style={{ width: "100%", marginBottom: "12px", borderCollapse: "separate", borderSpacing: "10px 0" }}>
+          <tbody>
+            <tr>
+              <td style={{ border: "1px solid #d0d8ea", borderRadius: "7px", padding: "10px 12px", verticalAlign: "top", width: "50%" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", color: BLUE, fontWeight: "bold", fontSize: "11px", marginBottom: "7px", paddingBottom: "6px", borderBottom: "1px dashed #d0d8ea" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                  SHIPPING ADDRESS
+                </div>
+                {addr ? (
+                  <div style={{ lineHeight: "1.6", fontSize: "11px" }}>
+                    <div style={{ fontWeight: "600" }}>{addr.fullName}</div>
+                    <div>{addr.addressLine1}</div>
+                    {addr.addressLine2 && <div>{addr.addressLine2}</div>}
+                    <div>{addr.city}, {addr.state} {addr.postalCode}</div>
+                    {addr.phoneNumber && <div>{addr.phoneNumber}</div>}
+                  </div>
+                ) : (
+                  <div style={{ color: "#888" }}>Address not available</div>
+                )}
+              </td>
+              <td style={{ border: "1px solid #d0d8ea", borderRadius: "7px", padding: "10px 12px", verticalAlign: "top", width: "50%" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", color: BLUE, fontWeight: "bold", fontSize: "11px", marginBottom: "7px", paddingBottom: "6px", borderBottom: "1px dashed #d0d8ea" }}>
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                  PAYMENT METHOD
+                </div>
+                <div style={{ fontWeight: "600", marginBottom: "3px" }}>
+                  {order.paymentMethod === "cod" ? "Cash On Delivery" : order.paymentMethod}
+                </div>
+                <div style={{ color: "#666", fontSize: "10.5px" }}>Payment due on delivery</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         {/* ── Feature icons ── */}
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", border: "1px solid #dde3ef", borderRadius: "8px", marginBottom: "18px", overflow: "hidden" }}>
-          {[
-            { icon: "🛡", label: "100%", sub: "Authentic Products" },
-            { icon: "%", label: "Best", sub: "Prices" },
-            { icon: "🚚", label: "Fast & Safe", sub: "Delivery" },
-            { icon: "🎧", label: "Dedicated", sub: "Support" },
-          ].map((f, i, arr) => (
-            <div
-              key={f.sub}
-              style={{
-                padding: "12px 8px",
-                textAlign: "center",
-                borderRight: i < arr.length - 1 ? "1px solid #dde3ef" : "none",
-              }}
-            >
-              <div style={{ fontSize: "20px", marginBottom: "4px" }}>{f.icon}</div>
-              <p style={{ fontWeight: "600", fontSize: "11px", color: "#333" }}>{f.label}</p>
-              <p style={{ fontSize: "10px", color: "#666" }}>{f.sub}</p>
-            </div>
-          ))}
-        </div>
+        <table style={{ width: "100%", border: "1px solid #d0d8ea", borderRadius: "7px", marginBottom: "12px", borderCollapse: "collapse", overflow: "hidden" }}>
+          <tbody>
+            <tr>
+              {[
+                {
+                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>,
+                  label: "100%", sub: "Authentic Products",
+                },
+                {
+                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><line x1="19" y1="5" x2="5" y2="19"/><circle cx="6.5" cy="6.5" r="2.5"/><circle cx="17.5" cy="17.5" r="2.5"/></svg>,
+                  label: "Best", sub: "Prices",
+                },
+                {
+                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>,
+                  label: "Fast & Safe", sub: "Delivery",
+                },
+                {
+                  icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={NAVY} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>,
+                  label: "Dedicated", sub: "Support",
+                },
+              ].map((f, i) => (
+                <td
+                  key={f.sub}
+                  style={{
+                    padding: "10px 8px",
+                    textAlign: "center",
+                    borderRight: i < 3 ? "1px solid #d0d8ea" : "none",
+                    width: "25%",
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "center", marginBottom: "4px" }}>{f.icon}</div>
+                  <div style={{ fontWeight: "600", fontSize: "10.5px" }}>{f.label}</div>
+                  <div style={{ color: "#666", fontSize: "9.5px" }}>{f.sub}</div>
+                </td>
+              ))}
+            </tr>
+          </tbody>
+        </table>
 
         {/* ── Pre-footer ── */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "14px", fontSize: "11px" }}>
-          <div style={{ lineHeight: "1.7" }}>
-            <p style={{ color: NAVY, fontWeight: "bold", marginBottom: "3px" }}>Need Help?</p>
-            <p>📞 Phone: {COMPANY.phone}</p>
-            <p>✉ Email: {COMPANY.email}</p>
-            <p>🕐 Mon – Sat | 10:00 AM – 7:00 PM</p>
-          </div>
-          <div style={{ textAlign: "right" }}>
-            <p style={{ color: "#2a7de1", fontWeight: "bold", fontSize: "13px", marginBottom: "4px" }}>
-              Thank you for choosing InstantNeed.
-            </p>
-            <p style={{ color: "#555" }}>We look forward to serving your business again!</p>
-          </div>
-        </div>
+        <table style={{ width: "100%", marginBottom: "10px" }}>
+          <tbody>
+            <tr>
+              <td style={{ verticalAlign: "top", fontSize: "10.5px", lineHeight: "1.7" }}>
+                <div style={{ color: NAVY, fontWeight: "bold", marginBottom: "3px" }}>Need Help?</div>
+                <div>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline", marginRight: "4px", verticalAlign: "middle" }}><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.99 14 19.79 19.79 0 0 1 1.92 5.45 2 2 0 0 1 3.89 3h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L8.09 10.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
+                  Phone: {COMPANY.phone}
+                </div>
+                <div>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline", marginRight: "4px", verticalAlign: "middle" }}><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                  Email: {COMPANY.email}
+                </div>
+                <div>
+                  <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" style={{ display: "inline", marginRight: "4px", verticalAlign: "middle" }}><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Mon – Sat | 10:00 AM – 7:00 PM
+                </div>
+              </td>
+              <td style={{ textAlign: "right", verticalAlign: "bottom" }}>
+                <div style={{ color: BLUE, fontWeight: "bold", fontSize: "12.5px", marginBottom: "3px" }}>
+                  Thank you for choosing InstantNeed.
+                </div>
+                <div style={{ color: "#555", fontSize: "10.5px" }}>
+                  We look forward to serving your business again!
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
 
         {/* ── Bottom bar ── */}
-        <div style={{ backgroundColor: NAVY, color: "white", padding: "9px 16px", borderRadius: "4px", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: "11px" }}>
-          <span style={{ fontWeight: "bold", fontSize: "13px" }}>🛒 InstantNeed</span>
-          <span style={{ color: "#c8d6f0" }}>
+        <div style={{ backgroundColor: NAVY, color: "white", padding: "8px 14px", borderRadius: "4px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "7px", fontWeight: "bold", fontSize: "12px" }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            InstantNeed
+          </div>
+          <div style={{ color: "#c0ceea", fontSize: "10px" }}>
             This is a system generated invoice and does not require a signature.
-          </span>
+          </div>
         </div>
       </div>
     </>
