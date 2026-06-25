@@ -96,10 +96,6 @@ export default function CartPage() {
               <span>Subtotal</span>
               <span>{formatCurrency(subtotal, currencyCode)}</span>
             </div>
-            <p className="text-xs text-muted-foreground">
-              Shipping and taxes calculated at checkout
-            </p>
-
             <Link href="/checkout" className={cn(buttonVariants({ size: "lg" }), "w-full")}>
               Proceed to checkout <ArrowRight className="ml-2 h-4 w-4" />
             </Link>

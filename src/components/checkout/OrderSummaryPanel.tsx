@@ -60,10 +60,7 @@ export function OrderSummaryPanel() {
           <span>Shipping</span>
           <span className="text-green-600">Free</span>
         </div>
-        <div className="flex justify-between text-muted-foreground">
-          <span>Tax</span>
-          <span>Calculated at invoice</span>
-        </div>
+
       </div>
 
       <Separator />
