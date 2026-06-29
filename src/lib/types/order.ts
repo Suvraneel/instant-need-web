@@ -45,6 +45,7 @@ export interface OrderDTO {
   items: OrderItemDTO[];
   customerName?: string;
   customerBusinessName?: string;
+  invoiceUrl?: string;
 }
 
 export interface OrderListItem {

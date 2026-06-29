@@ -3,7 +3,7 @@
 import { use, useState } from "react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
-import { ArrowLeft, Loader2 } from "lucide-react";
+import { ArrowLeft, Loader2, FileDown } from "lucide-react";
 import { toast } from "sonner";
 
 import { AdminHeader } from "@/components/layout/AdminHeader";
@@ -262,6 +262,23 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
                   Update
                 </Button>
               </div>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Invoice */}
+        {order.invoiceUrl && (
+          <Card>
+            <CardHeader className="pb-2">
+              <CardTitle className="text-sm">Invoice</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <a href={order.invoiceUrl} target="_blank" rel="noopener noreferrer">
+                <Button variant="outline" size="sm">
+                  <FileDown className="h-4 w-4 mr-2" />
+                  Download Invoice PDF
+                </Button>
+              </a>
             </CardContent>
           </Card>
         )}
