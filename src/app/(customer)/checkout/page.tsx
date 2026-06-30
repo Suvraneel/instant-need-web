@@ -70,15 +70,15 @@ export default function CheckoutPage() {
       ? (savedAddresses?.find((a) => a.id === savedAddressId)?.postalCode ?? "")
       : (newPostalCode ?? "");
 
-  const { data: pincodeRule } = useQuery({
+  const { data: pincodeRule, isFetching: fetchingPincode } = useQuery({
     queryKey: ["pincode-min-order", activePincode],
     queryFn: () => pincodeApi.getMinOrder(activePincode),
     enabled: activePincode.length === 6,
     retry: false,
   });
 
-  const belowMinOrder =
-    pincodeRule != null && subtotal < pincodeRule.minAmount;
+  const belowMinOrder = pincodeRule != null && subtotal < pincodeRule.minAmount;
+  const pincodeUnavailable = pincodeRule === null && activePincode.length === 6 && !fetchingPincode;
 
   // Redirect if cart is empty
   if (items.length === 0) {
@@ -105,6 +105,10 @@ export default function CheckoutPage() {
   }
 
   async function onSubmit(data: CheckoutFormData) {
+    if (pincodeUnavailable) {
+      setServerError(`Sorry, service is not available for PIN code ${activePincode}.`);
+      return;
+    }
     setServerError("");
     try {
       const orderItems = items.map((i) => ({
@@ -232,6 +236,16 @@ export default function CheckoutPage() {
               />
             </section>
 
+            {/* ── Pincode service unavailable warning ──────────── */}
+            {pincodeUnavailable && (
+              <div className="flex items-start gap-3 rounded-lg border border-red-300 bg-red-50 dark:bg-red-950/30 dark:border-red-700 px-4 py-3 text-sm">
+                <AlertTriangle className="h-4 w-4 text-red-500 mt-0.5 shrink-0" />
+                <p className="text-red-800 dark:text-red-300">
+                  Sorry, service is not available for PIN code <strong>{activePincode}</strong>.
+                </p>
+              </div>
+            )}
+
             {/* ── Pincode minimum order warning ────────────────── */}
             {belowMinOrder && pincodeRule && (
               <div className="flex items-start gap-3 rounded-lg border border-amber-300 bg-amber-50 dark:bg-amber-950/30 dark:border-amber-700 px-4 py-3 text-sm">
@@ -274,7 +288,7 @@ export default function CheckoutPage() {
                 type="submit"
                 size="lg"
                 className="w-full"
-                disabled={isPending || belowMinOrder}
+                disabled={isPending || belowMinOrder || pincodeUnavailable}
               >
                 {isPending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                 Place order
