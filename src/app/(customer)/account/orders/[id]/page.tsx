@@ -2,7 +2,7 @@
 
 import { use } from "react";
 import Link from "next/link";
-import { ChevronLeft, Package, MapPin, CreditCard } from "lucide-react";
+import { ChevronLeft, Package, MapPin, CreditCard, FileDown } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { StatusBadge } from "@/components/ui/status-badge";
@@ -135,6 +135,27 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
           </div>
         </div>
       </div>
+
+      {/* Invoice */}
+      {order.invoiceUrl && (
+        <div className="rounded-xl border bg-card p-4 flex items-center justify-between gap-3">
+          <div>
+            <p className="text-sm font-medium">Invoice</p>
+            <p className="text-xs text-muted-foreground mt-0.5">
+              #{order.orderNumber} · PDF
+            </p>
+          </div>
+          <a
+            href={order.invoiceUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium hover:bg-muted transition-colors"
+          >
+            <FileDown className="h-4 w-4" />
+            Download PDF
+          </a>
+        </div>
+      )}
 
       {/* Shipping + payment */}
       <div className="grid sm:grid-cols-2 gap-4">
