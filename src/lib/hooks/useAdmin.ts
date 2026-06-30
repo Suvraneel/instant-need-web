@@ -117,6 +117,14 @@ export function useUpdateOrderStatus(id: string) {
   });
 }
 
+export function useRegenerateInvoice(id: string) {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: () => adminOrdersApi.regenerateInvoice(id),
+    onSuccess: () => qc.invalidateQueries({ queryKey: adminOrderKeys.detail(id) }),
+  });
+}
+
 // ── Customers ─────────────────────────────────────────────────────────────
 
 export const adminCustomerKeys = {

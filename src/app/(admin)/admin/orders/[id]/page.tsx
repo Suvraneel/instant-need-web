@@ -20,7 +20,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { useAdminOrder, useUpdateOrderStatus } from "@/lib/hooks/useAdmin";
+import { useAdminOrder, useUpdateOrderStatus, useRegenerateInvoice } from "@/lib/hooks/useAdmin";
 import { getApiError } from "@/lib/errors";
 import { formatCurrency } from "@/lib/utils";
 import type { OrderStatus } from "@/lib/types/order";
@@ -53,6 +53,7 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
   const router = useRouter();
   const { data: order, isLoading } = useAdminOrder(id);
   const updateStatus = useUpdateOrderStatus(id);
+  const regenerateInvoice = useRegenerateInvoice(id);
   const [selectedStatus, setSelectedStatus] = useState<OrderStatus | "">("");
 
   async function handleStatusUpdate() {
@@ -267,21 +268,32 @@ export default function OrderDetailPage({ params }: OrderDetailPageProps) {
         )}
 
         {/* Invoice */}
-        {order.invoiceUrl && (
-          <Card>
-            <CardHeader className="pb-2">
-              <CardTitle className="text-sm">Invoice</CardTitle>
-            </CardHeader>
-            <CardContent>
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm">Invoice</CardTitle>
+          </CardHeader>
+          <CardContent className="flex items-center gap-3">
+            {order.invoiceUrl ? (
               <a href={order.invoiceUrl} target="_blank" rel="noopener noreferrer">
                 <Button variant="outline" size="sm">
                   <FileDown className="h-4 w-4 mr-2" />
                   Download Invoice PDF
                 </Button>
               </a>
-            </CardContent>
-          </Card>
-        )}
+            ) : (
+              <p className="text-sm text-muted-foreground">No invoice generated yet.</p>
+            )}
+            <Button
+              variant="ghost"
+              size="sm"
+              disabled={regenerateInvoice.isPending}
+              onClick={() => regenerateInvoice.mutate()}
+            >
+              {regenerateInvoice.isPending && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+              {order.invoiceUrl ? "Regenerate" : "Generate Invoice"}
+            </Button>
+          </CardContent>
+        </Card>
 
         {/* Notes */}
         {order.notes && (

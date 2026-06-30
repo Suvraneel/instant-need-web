@@ -3,7 +3,7 @@
 import { use } from "react";
 import Link from "next/link";
 import { format } from "date-fns";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, FileDown } from "lucide-react";
 
 import { AdminHeader } from "@/components/layout/AdminHeader";
 import { Badge } from "@/components/ui/badge";
@@ -244,6 +244,7 @@ export default function CustomerDetailPage({ params }: CustomerDetailPageProps) 
                     <TableHead>Status</TableHead>
                     <TableHead className="text-right">Total</TableHead>
                     <TableHead>Date</TableHead>
+                    <TableHead>Invoice</TableHead>
                     <TableHead />
                   </TableRow>
                 </TableHeader>
@@ -268,6 +269,21 @@ export default function CustomerDetailPage({ params }: CustomerDetailPageProps) 
                         {order.placedAt
                           ? format(new Date(order.placedAt), "dd MMM yyyy")
                           : "—"}
+                      </TableCell>
+                      <TableCell>
+                        {order.invoiceUrl ? (
+                          <a
+                            href={order.invoiceUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1 text-xs text-primary hover:underline"
+                          >
+                            <FileDown className="h-3 w-3" />
+                            Download
+                          </a>
+                        ) : (
+                          <span className="text-xs text-muted-foreground">—</span>
+                        )}
                       </TableCell>
                       <TableCell>
                         <Link

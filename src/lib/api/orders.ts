@@ -39,4 +39,9 @@ export const adminOrdersApi = {
     apiClient
       .patch<OrderDTO>(`/admin/orders/${id}/status`, body)
       .then((r) => r.data),
+
+  regenerateInvoice: (id: string) =>
+    apiClient
+      .post<{ invoiceUrl: string }>(`/admin/orders/${id}/invoice/regenerate`)
+      .then((r) => r.data),
 };
