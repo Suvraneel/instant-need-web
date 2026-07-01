@@ -6,6 +6,7 @@ import { Minus, Plus, Trash2, Package } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useCartStore, type CartItem } from "@/lib/stores/cartStore";
+import { useProduct } from "@/lib/hooks/useCatalog";
 import { formatCurrency } from "@/lib/utils";
 
 interface CartLineItemProps {
@@ -15,8 +16,10 @@ interface CartLineItemProps {
 export function CartLineItem({ item }: CartLineItemProps) {
   const updateQty = useCartStore((s) => s.updateQty);
   const removeItem = useCartStore((s) => s.removeItem);
+  const { data: product } = useProduct(item.slug);
 
-  const stockLimit = item.stock ?? Infinity;
+  // Use live stock from the API; fall back to the value stored at add-time
+  const stockLimit = product?.stock ?? item.stock ?? Infinity;
 
   function handleQty(value: string) {
     const n = parseInt(value, 10);
@@ -84,7 +87,7 @@ export function CartLineItem({ item }: CartLineItemProps) {
               onChange={(e) => handleQty(e.target.value)}
               className="h-7 w-14 text-center text-sm px-1"
               min={item.moq}
-              max={item.stock}
+              max={stockLimit === Infinity ? undefined : stockLimit}
             />
             <Button
               variant="outline"
