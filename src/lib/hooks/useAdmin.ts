@@ -3,6 +3,7 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { adminCatalogApi } from "@/lib/api/catalog";
 import { adminOrdersApi } from "@/lib/api/orders";
+import { catalogKeys } from "@/lib/hooks/useCatalog";
 import { adminCustomerApi } from "@/lib/api/customer";
 import type {
   ProductFilterParams,
@@ -43,7 +44,10 @@ export function useCreateProduct() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: CreateProductRequest) => adminCatalogApi.createProduct(body),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminProductKeys.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminProductKeys.all });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
+    },
   });
 }
 
@@ -53,6 +57,7 @@ export function useUpdateProduct(id: string) {
     mutationFn: (body: UpdateProductRequest) => adminCatalogApi.updateProduct(id, body),
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: adminProductKeys.all });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
     },
   });
 }
@@ -61,7 +66,10 @@ export function useDeleteProduct() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => adminCatalogApi.deleteProduct(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminProductKeys.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminProductKeys.all });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
+    },
   });
 }
 
@@ -70,7 +78,10 @@ export function useUploadProductImage(productId: string) {
   return useMutation({
     mutationFn: ({ file, altText, sortOrder }: { file: File; altText?: string; sortOrder?: number }) =>
       adminCatalogApi.uploadImage(productId, file, altText, sortOrder),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminProductKeys.detail(productId) }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminProductKeys.detail(productId) });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
+    },
   });
 }
 
@@ -78,7 +89,10 @@ export function useDeleteProductImage(productId: string) {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (imageId: string) => adminCatalogApi.deleteImage(productId, imageId),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminProductKeys.detail(productId) }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminProductKeys.detail(productId) });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
+    },
   });
 }
 
@@ -177,7 +191,10 @@ export function useCreateCategory() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (body: Partial<CategoryDTO>) => adminCatalogApi.createCategory(body),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminCategoryKeys.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminCategoryKeys.all });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
+    },
   });
 }
 
@@ -186,7 +203,10 @@ export function useUpdateCategory() {
   return useMutation({
     mutationFn: ({ id, body }: { id: string; body: Partial<CategoryDTO> }) =>
       adminCatalogApi.updateCategory(id, body),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminCategoryKeys.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminCategoryKeys.all });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
+    },
   });
 }
 
@@ -194,7 +214,10 @@ export function useDeleteCategory() {
   const qc = useQueryClient();
   return useMutation({
     mutationFn: (id: string) => adminCatalogApi.deleteCategory(id),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminCategoryKeys.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminCategoryKeys.all });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
+    },
   });
 }
 
@@ -203,7 +226,10 @@ export function useUploadCategoryImage() {
   return useMutation({
     mutationFn: ({ id, file }: { id: string; file: File }) =>
       adminCatalogApi.uploadCategoryImage(id, file),
-    onSuccess: () => qc.invalidateQueries({ queryKey: adminCategoryKeys.all }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: adminCategoryKeys.all });
+      qc.invalidateQueries({ queryKey: catalogKeys.all });
+    },
   });
 }
 
