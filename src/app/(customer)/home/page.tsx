@@ -24,7 +24,7 @@ function FeaturedCategories() {
     return (
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-28 rounded-xl" />
+          <Skeleton key={i} className="aspect-video rounded-xl" />
         ))}
       </div>
     );
@@ -37,7 +37,7 @@ function FeaturedCategories() {
       {categories.slice(0, 8).map((cat) => (
         <Link key={cat.id} href={`/categories/${cat.slug}`} className="group block">
           <Card className="overflow-hidden h-full transition-shadow hover:shadow-md">
-            <div className="relative h-24 bg-muted overflow-hidden">
+            <div className="relative aspect-video bg-muted overflow-hidden">
               {cat.imageUrl ? (
                 <Image
                   src={cat.imageUrl}
