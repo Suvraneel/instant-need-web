@@ -30,10 +30,7 @@ export function ProductCard({ product }: ProductCardProps) {
             </div>
           )}
           {product.stock > 0 && product.mrp && product.mrp > product.basePrice && (
-            <Badge
-              variant="destructive"
-              className="absolute top-1.5 right-1.5 text-[10px] font-bold"
-            >
+            <Badge className="absolute top-1.5 right-1.5 bg-red-600 text-white text-[10px] font-bold shadow-sm [a]:hover:bg-red-600">
               {Math.round((1 - product.basePrice / product.mrp) * 100)}% OFF
             </Badge>
           )}
