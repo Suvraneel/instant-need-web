@@ -29,6 +29,14 @@ export function ProductCard({ product }: ProductCardProps) {
               <Package className="h-12 w-12 text-muted-foreground/30" strokeWidth={1} />
             </div>
           )}
+          {product.stock > 0 && product.mrp && product.mrp > product.basePrice && (
+            <Badge
+              variant="destructive"
+              className="absolute top-1.5 right-1.5 text-[10px] font-bold"
+            >
+              {Math.round((1 - product.basePrice / product.mrp) * 100)}% OFF
+            </Badge>
+          )}
           {product.stock === 0 && (
             <div className="absolute inset-0 bg-background/70 flex items-center justify-center">
               <Badge variant="secondary">Out of stock</Badge>
