@@ -84,8 +84,9 @@ const nextConfig: NextConfig = {
   // Browser/mobile calls https://instant-need.vercel.app/api/v1/* or /uploads/*.
   // Vercel forwards server-side to EC2 over HTTP — no CORS preflight,
   // no cleartext-HTTP issues on Android 9+.
-  // On EC2, set STORAGE_BASE_URL=https://instant-need.vercel.app/uploads so
-  // uploaded image URLs are stored as HTTPS Vercel paths.
+  // /uploads/** only serves content when EC2 has STORAGE_TYPE=local; in the
+  // normal STORAGE_TYPE=s3 setup, uploaded files are served directly from
+  // CloudFront (STORAGE_BASE_URL) and never touch this rewrite.
   async rewrites() {
     const backendUrl = process.env.API_ORIGIN ?? "http://ec2-35-171-29-245.compute-1.amazonaws.com:8080";
     return [
