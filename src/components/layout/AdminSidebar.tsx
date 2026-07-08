@@ -50,10 +50,10 @@ export function AdminSidebar() {
       )}
     >
       {/* Logo */}
-      <div className="flex h-16 items-center border-b px-4 gap-2 overflow-hidden">
+      <Link href="/home" className="flex h-16 items-center border-b px-4 gap-2 overflow-hidden">
         <InstantNeedIcon size={24} className="shrink-0" />
         {sidebarOpen && <InstantNeedWordmark className="text-base whitespace-nowrap" />}
-      </div>
+      </Link>
 
       {/* Nav */}
       <nav className="flex flex-col gap-1 p-2 flex-1">
